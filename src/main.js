@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/index'
-import store from './store/store'
 import 'animate.css/animate.css'
 import axios from 'axios'
 import ElementUI from 'element-ui'
@@ -21,7 +20,6 @@ Vue.prototype.$moment = moment;
 new Vue({
   el: '#app',
   router,
-  store,
   template: '<app/>',
   components: { App }
 })
