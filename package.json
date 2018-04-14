@@ -13,9 +13,14 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
-    "element-ui": "^2.0.5",
+    "axios": "^0.17.1",
+    "crypto-js": "^3.1.9-1",
+    "element-ui": "^2.3.3",
+    "moment": "^2.20.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-lazyload": "^1.1.4",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

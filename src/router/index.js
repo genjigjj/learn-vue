@@ -1,28 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LoginView from '../components/Login'
-import SignView from '../components/Sign'
-import MainView from '../components/Main'
+import IndexView from '../components/Index'
+import VideoView from '../components/Video'
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
     {
+      name: 'index',
       path:'/',
-      component:LoginView
+      component:IndexView
     },
     {
-      path:'/sign',
-      component:SignView
-    },
-    {
-      path:'/login',
-      component:LoginView
-    },
-    {
-      path:'/main',
-      component:MainView
+      name:'video',
+      path:'/video',
+      component:VideoView,
     }
   ]
 })

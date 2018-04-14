@@ -1,17 +1,15 @@
 <template>
   <div id="app">
-    <transition
-      enter-active-class="animated bounceInDown"
-    >
-    <router-view></router-view>
-    </transition>
+    <keep-alive include="index">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 
   export default {
-    name: 'app',
+    name: 'app'
   }
 </script>
 
