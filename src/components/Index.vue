@@ -17,7 +17,7 @@
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{countAddtime(item)}}</time>
+                    <time class="time">{{countAddTime(item)}}</time>
                   </div>
                   <div class="bottom clearfix">
                     <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
@@ -43,7 +43,7 @@
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{countAddtime(item)}}</time>
+                    <time class="time">{{countAddTime(item)}}</time>
                   </div>
                   <div class="bottom clearfix">
                     <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
@@ -69,7 +69,7 @@
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{countAddtime(item)}}</time>
+                    <time class="time">{{countAddTime(item)}}</time>
                   </div>
                   <div class="bottom clearfix">
                     <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
@@ -114,7 +114,7 @@
     },
     methods: {
       //计算发布时间差
-      countAddtime(item) {
+      countAddTime(item) {
         return this.$moment(item.addtime, 'X').fromNow();
       },
       //计算喜欢该视频人数所占百分比

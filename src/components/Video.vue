@@ -7,7 +7,7 @@
                   allowfullscreen frameborder="0" scrolling="no">
           </iframe>
         </el-card>
-        <el-button type="primary" icon="el-icon-back" circle @click="goback"></el-button>
+        <el-button type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
         <el-button :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
       </el-main>
     </el-container>
@@ -16,6 +16,7 @@
 
 <script>
   import CryptoJS from "crypto-js"
+  import Store from "store"
 
   export default {
     name: "video",
@@ -23,14 +24,36 @@
       return {
         videoUrl: this.$route.query.q,
         vid: this.$route.query.v,
-        type: 'info'
+        type: ''
       }
     },
     methods: {
+      //收藏
       collection() {
-        this.type === 'info' ? this.type = 'danger' : this.type = 'info';
+        let videoList = Store.get('videoList');
+        if(videoList === undefined){
+          videoList = [];
+        }
+        if (this.type === 'info') {
+          videoList.push(this.vid);
+          Store.set('videoList',videoList);
+          this.type = 'danger';
+          this.$message({
+            message:'收藏成功',
+            type: 'success'
+          });
+        }else {
+          let index = videoList.indexOf(this.vid);
+          videoList.splice(index,1);
+          Store.set('videoList',videoList);
+          this.type = 'info';
+          this.$message({
+            message:'取消收藏成功',
+            type: 'success'
+          });
+        }
       },
-      goback(){
+      goBack(){
         this.$router.back();
       }
     },
@@ -38,6 +61,14 @@
       decodeUrl() {
         let parsedWordArray = CryptoJS.enc.Base64.parse(this.videoUrl);
         return parsedWordArray.toString(CryptoJS.enc.Utf8);
+      }
+    },
+    mounted(){
+      let videoList = Store.get('videoList');
+      if(videoList === undefined || videoList.indexOf(this.vid) === -1){
+        this.type = 'info';
+      }else {
+        this.type = 'danger';
       }
     }
   }
