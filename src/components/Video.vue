@@ -1,6 +1,5 @@
 <template>
   <div id="video">
-    <el-container>
       <el-main>
         <el-card>
           <iframe :src="decodeUrl"
@@ -10,7 +9,6 @@
         <el-button type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
         <el-button :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
       </el-main>
-    </el-container>
   </div>
 </template>
 

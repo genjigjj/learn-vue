@@ -1,6 +1,5 @@
 <template>
   <div id="index">
-    <el-container>
       <el-main>
         <el-row :gutter="20">
           <el-col :span="6" v-for="(item,index) in filterList(0,3)" :key="item.id">
@@ -82,16 +81,15 @@
         </el-row>
       </el-main>
       <el-footer>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size= "12"
-            :page-count="getPageCount"
-            :current-page.sync="currentPage"
-            @current-change="changePage">
-          </el-pagination>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="12"
+          :page-count="getPageCount"
+          :current-page.sync="currentPage"
+          @current-change="changePage">
+        </el-pagination>
       </el-footer>
-    </el-container>
   </div>
 </template>
 
@@ -107,9 +105,9 @@
         currentPage: 0  // 当前页数
       }
     },
-    computed : {
-      getPageCount(){
-        return Math.floor(this.totalVideos/12);
+    computed: {
+      getPageCount() {
+        return Math.ceil(this.totalVideos / 12);
       }
     },
     methods: {
@@ -135,12 +133,12 @@
       filterList(begin, end) {
         return this.videosList.slice(begin, end + 1);
       },
-      changePage(pageNo){
+      changePage(pageNo) {
         this.$axios({
           params: {
             limit: 12
           },
-          url: 'https://api.avgle.com/v1/videos/'+pageNo,
+          url: 'https://api.avgle.com/v1/videos/' + pageNo,
           method: 'get',
         }).then((res) => {
           let respon = res.data;
@@ -152,7 +150,7 @@
           console.log(err);
         })
       },
-      encodeUrl(url){
+      encodeUrl(url) {
         let wordArray = CryptoJS.enc.Utf8.parse(url);
         return CryptoJS.enc.Base64.stringify(wordArray);
       }
@@ -162,7 +160,7 @@
         params: {
           limit: 12
         },
-        url: 'https://api.avgle.com/v1/videos/'+this.currentPage,
+        url: 'https://api.avgle.com/v1/videos/' + this.currentPage,
         method: 'get',
       }).then((res) => {
         let respon = res.data;
@@ -178,7 +176,7 @@
 </script>
 
 <style scoped>
-  .el-row {
+  .el-main .el-row {
     margin-bottom: 20px;
   }
 
@@ -235,17 +233,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   a {
     text-decoration: none;
   }
-  .el-pagination{
+
+  .el-pagination {
     text-align: center;
   }
-  .el-icon-star-on{
+
+  .el-icon-star-on {
     margin-right: 4px;
     color: #f35958
   }
-  .el-icon-view{
+
+  .el-icon-view {
     margin-left: 4px;
   }
 </style>
