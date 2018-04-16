@@ -2,7 +2,7 @@
   <div id="index">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="(item,index) in filterList(0,3)" :key="item.id">
+        <el-col :span="6" v-for="item in filterList(0,3)" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="(item,index) in filterList(4,7)" :key="item.id">
+        <el-col :span="6" v-for="item in filterList(4,7)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="(item,index) in filterList(8,11)" :key="item.id">
+        <el-col :span="6" v-for="item in filterList(8,11)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
