@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       videosList: [], // 视频总列表
-      videos: [],
+      vidList: [],
       totalVideos: 0, // 总视频数
       currentPage: 1 // 当前页数
     }
@@ -136,8 +136,24 @@ export default {
     filterList(begin, end) {
       return this.videosList.slice(begin, end + 1)
     },
+    // 换页
     changePage(pageNo) {
-      this.videos = this.videosList.slice((pageNo - 1) * 12, pageNo * 12)
+      const vidTempList = this.vidList.slice((pageNo - 1) * 12, pageNo * 12)
+      this.videosList = []
+      for (const item of vidTempList) {
+        this.$axios({
+          url: 'https://api.avgle.com/v1/video/' + item,
+          method: 'get'
+        }).then((res) => {
+          const respon = res.data
+          if (respon.success) {
+            const video = respon.response.video
+            this.videosList.push(video)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+      }
     },
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
@@ -146,10 +162,12 @@ export default {
   },
   mounted: function() {
     const vidList = Store.get('videoList')
-    if (vidList !== undefined) {
+    if (vidList !== undefined && vidList.length > 0) {
+      this.vidList = vidList
       this.totalVideos = vidList.length
-      const vList = []
-      for (const item of vidList) {
+      // 获取收藏列表前12个视频
+      const tempVidList = vidList.slice(0, 12)
+      for (const item of tempVidList) {
         this.$axios({
           url: 'https://api.avgle.com/v1/video/' + item,
           method: 'get'
@@ -157,15 +175,12 @@ export default {
           const respon = res.data
           if (respon.success) {
             const video = respon.response.video
-            vList.push(video)
+            this.videosList.push(video)
           }
         }).catch((err) => {
           console.log(err)
         })
       }
-      console.log(vList)
-      this.videosList = [].concat(vList)
-      this.videos = [].concat(vList.slice(0, 12))
     }
   }
 }
