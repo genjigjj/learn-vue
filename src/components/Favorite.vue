@@ -162,6 +162,7 @@ export default {
     // 换页
     changePage(pageNo) {
       const vidTempList = this.vidList.slice((pageNo - 1) * 12, pageNo * 12)
+      console.log(vidTempList)
       this.videosList = []
       for (const item of vidTempList) {
         this.$axios({
@@ -172,6 +173,7 @@ export default {
           if (respon.success) {
             const video = respon.response.video
             this.videosList.push(video)
+            console.log(this.videosList)
           }
         }).catch((err) => {
           console.log(err)
