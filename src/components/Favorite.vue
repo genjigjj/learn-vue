@@ -94,81 +94,81 @@
 </template>
 
 <script>
-  import CryptoJS from "crypto-js"
-  import Store from "store"
+import CryptoJS from 'crypto-js'
+import Store from 'store'
 
-  export default {
-    name: 'index',
-    data() {
-      return {
-        videosList: [], //视频总列表
-        videos: [],
-        totalVideos: 0, // 总视频数
-        currentPage: 1  // 当前页数
-      }
+export default {
+  name: 'index',
+  data() {
+    return {
+      videosList: [], // 视频总列表
+      videos: [],
+      totalVideos: 0, // 总视频数
+      currentPage: 1 // 当前页数
+    }
+  },
+  computed: {
+    getPageCount() {
+      const pageCount = Math.ceil(this.totalVideos / 12)
+      return pageCount
+    }
+  },
+  methods: {
+    // 计算发布时间差
+    countAddTime(item) {
+      return this.$moment(item.addtime, 'X').fromNow()
     },
-    computed: {
-      getPageCount() {
-        let pageCount = Math.ceil(this.totalVideos / 12);
-        return  pageCount ;
-      }
+    // 计算喜欢该视频人数所占百分比
+    countLikeRate(item) {
+      const rate = (item.likes) / ((item.likes + item.dislikes) === 0 ? 1 : (item.likes + item.dislikes)) * 100
+      return Math.floor(rate)
     },
-    methods: {
-      //计算发布时间差
-      countAddTime(item) {
-        return this.$moment(item.addtime, 'X').fromNow();
-      },
-      //计算喜欢该视频人数所占百分比
-      countLikeRate(item) {
-        let rate = (item.likes) / ((item.likes + item.dislikes) === 0 ? 1 : (item.likes + item.dislikes)) * 100;
-        return Math.floor(rate);
-      },
-      //播放视频
-      playPreVideo(event) {
-        let video = event.currentTarget;
-        video.play();
-      },
-      //重新加载
-      reloadVideo(event) {
-        let video = event.currentTarget;
-        video.load();
-      },
-      filterList(begin, end) {
-        return this.videosList.slice(begin, end + 1);
-      },
-      changePage(pageNo) {
-        this.videos = this.videosList.slice((pageNo-1)*12,pageNo*12);
-      },
-      encodeUrl(url) {
-        let wordArray = CryptoJS.enc.Utf8.parse(url);
-        return CryptoJS.enc.Base64.stringify(wordArray);
-      }
+    // 播放视频
+    playPreVideo(event) {
+      const video = event.currentTarget
+      video.play()
     },
-    mounted: function () {
-      let vidList = Store.get('videoList');
-      if(vidList !== undefined){
-        this.totalVideos = vidList.length;
-        let vList = [];
-        for(let item of vidList) {
-          this.$axios({
-            url: 'https://api.avgle.com/v1/video/' + item,
-            method: 'get',
-          }).then((res) => {
-            let respon = res.data;
-            if (respon.success) {
-              let video = respon.response.video;
-              vList.push(video);
-            }
-          }).catch((err) => {
-            console.log(err);
-          })
-        }
-        console.log(vList);
-        this.videosList = [].concat(vList);
-        this.videos = [].concat(vList.slice(0,12));
+    // 重新加载
+    reloadVideo(event) {
+      const video = event.currentTarget
+      video.load()
+    },
+    filterList(begin, end) {
+      return this.videosList.slice(begin, end + 1)
+    },
+    changePage(pageNo) {
+      this.videos = this.videosList.slice((pageNo - 1) * 12, pageNo * 12)
+    },
+    encodeUrl(url) {
+      const wordArray = CryptoJS.enc.Utf8.parse(url)
+      return CryptoJS.enc.Base64.stringify(wordArray)
+    }
+  },
+  mounted: function() {
+    const vidList = Store.get('videoList')
+    if (vidList !== undefined) {
+      this.totalVideos = vidList.length
+      const vList = []
+      for (const item of vidList) {
+        this.$axios({
+          url: 'https://api.avgle.com/v1/video/' + item,
+          method: 'get'
+        }).then((res) => {
+          const respon = res.data
+          if (respon.success) {
+            const video = respon.response.video
+            vList.push(video)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
       }
+      console.log(vList)
+      this.videosList = [].concat(vList)
+      this.videos = [].concat(vList.slice(0, 12))
     }
   }
+}
 </script>
 
 <style scoped>

@@ -13,63 +13,63 @@
 </template>
 
 <script>
-  import CryptoJS from "crypto-js"
-  import Store from "store"
+import CryptoJS from 'crypto-js'
+import Store from 'store'
 
-  export default {
-    name: "video",
-    data() {
-      return {
-        videoUrl: this.$route.query.q,
-        vid: this.$route.query.v,
-        type: ''
+export default {
+  name: 'video',
+  data() {
+    return {
+      videoUrl: this.$route.query.q,
+      vid: this.$route.query.v,
+      type: ''
+    }
+  },
+  methods: {
+    // 收藏
+    collection() {
+      let videoList = Store.get('videoList')
+      if (videoList === undefined) {
+        videoList = []
+      }
+      if (this.type === 'info') {
+        videoList.push(this.vid)
+        Store.set('videoList', videoList)
+        this.type = 'danger'
+        this.$message({
+          message: '收藏成功',
+          type: 'success'
+        })
+      } else {
+        const index = videoList.indexOf(this.vid)
+        videoList.splice(index, 1)
+        Store.set('videoList', videoList)
+        this.type = 'info'
+        this.$message({
+          message: '取消收藏成功',
+          type: 'success'
+        })
       }
     },
-    methods: {
-      //收藏
-      collection() {
-        let videoList = Store.get('videoList');
-        if(videoList === undefined){
-          videoList = [];
-        }
-        if (this.type === 'info') {
-          videoList.push(this.vid);
-          Store.set('videoList',videoList);
-          this.type = 'danger';
-          this.$message({
-            message:'收藏成功',
-            type: 'success'
-          });
-        }else {
-          let index = videoList.indexOf(this.vid);
-          videoList.splice(index,1);
-          Store.set('videoList',videoList);
-          this.type = 'info';
-          this.$message({
-            message:'取消收藏成功',
-            type: 'success'
-          });
-        }
-      },
-      goBack(){
-        this.$router.back();
-      }
-    },
-    computed: {
-      decodeUrl() {
-        let parsedWordArray = CryptoJS.enc.Base64.parse(this.videoUrl);
-        return parsedWordArray.toString(CryptoJS.enc.Utf8);
-      }
-    },
-    mounted(){
-      let videoList = Store.get('videoList');
-      if(videoList === undefined || videoList.indexOf(this.vid) === -1){
-        this.type = 'info';
-      }else {
-        this.type = 'danger';
-      }
+    goBack() {
+      this.$router.back()
+    }
+  },
+  computed: {
+    decodeUrl() {
+      const parsedWordArray = CryptoJS.enc.Base64.parse(this.videoUrl)
+      return parsedWordArray.toString(CryptoJS.enc.Utf8)
+    }
+  },
+  mounted() {
+    const videoList = Store.get('videoList')
+    if (videoList === undefined || videoList.indexOf(this.vid) === -1) {
+      this.type = 'info'
+    } else {
+      this.type = 'danger'
     }
   }
+}
 </script>
 
 <style scoped>

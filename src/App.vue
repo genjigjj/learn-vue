@@ -34,10 +34,9 @@
 </template>
 
 <script>
-
-  export default {
-    name: 'app'
-  }
+export default {
+  name: 'app'
+}
 </script>
 
 <style scoped>
@@ -46,19 +45,20 @@
     background-color: #fff;
   }
 
-  .search-input{
+  .search-input {
     padding: 10px;
   }
 
-  .el-header{
+  .el-header {
     border: 1px solid #eee;
     background-color: #323232;
   }
-  .el-menu-item{
+
+  .el-menu-item {
     float: right;
   }
 
-  .el-menu--horizontal{
-    border-bottom:none;
+  .el-menu--horizontal {
+    border-bottom: none;
   }
 </style>
