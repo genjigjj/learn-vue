@@ -101,7 +101,7 @@ export default {
     return {
       videosList: [], // 视频列表
       totalVideos: 0, // 总视频数
-      currentPage: 0 // 当前页数
+      currentPage: 1 // 当前页数
     }
   },
   computed: {
@@ -137,7 +137,7 @@ export default {
         params: {
           limit: 12
         },
-        url: 'https://api.avgle.com/v1/videos/' + pageNo,
+        url: 'https://api.avgle.com/v1/videos/' + (pageNo - 1),
         method: 'get'
       }).then((res) => {
         const respon = res.data
@@ -154,12 +154,12 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  mounted: function() {
+  activated: function() {
     this.$axios({
       params: {
         limit: 12
       },
-      url: 'https://api.avgle.com/v1/videos/' + this.currentPage,
+      url: 'https://api.avgle.com/v1/videos/' + (this.currentPage - 1),
       method: 'get'
     }).then((res) => {
       const respon = res.data

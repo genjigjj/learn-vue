@@ -26,7 +26,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <keep-alive include="index">
+      <keep-alive include="index,favorite">
         <router-view></router-view>
       </keep-alive>
     </el-container>

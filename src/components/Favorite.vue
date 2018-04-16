@@ -98,7 +98,7 @@ import CryptoJS from 'crypto-js'
 import Store from 'store'
 
 export default {
-  name: 'index',
+  name: 'favorite',
   data() {
     return {
       videosList: [], // 视频总列表
@@ -111,6 +111,29 @@ export default {
     getPageCount() {
       const pageCount = Math.ceil(this.totalVideos / 12)
       return pageCount
+    }
+  },
+  watch: {
+    vidList() {
+      if (this.vidList !== undefined && this.vidList.length > 0) {
+        this.totalVideos = this.vidList.length
+        const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
+        this.videosList = []
+        for (const item of vidTempList) {
+          this.$axios({
+            url: 'https://api.avgle.com/v1/video/' + item,
+            method: 'get'
+          }).then((res) => {
+            const respon = res.data
+            if (respon.success) {
+              const video = respon.response.video
+              this.videosList.push(video)
+            }
+          }).catch((err) => {
+            console.log(err)
+          })
+        }
+      }
     }
   },
   methods: {
@@ -160,14 +183,14 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  mounted: function() {
+  created() {
     const vidList = Store.get('videoList')
     if (vidList !== undefined && vidList.length > 0) {
       this.vidList = vidList
       this.totalVideos = vidList.length
-      // 获取收藏列表前12个视频
-      const tempVidList = vidList.slice(0, 12)
-      for (const item of tempVidList) {
+      const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
+      this.videosList = []
+      for (const item of vidTempList) {
         this.$axios({
           url: 'https://api.avgle.com/v1/video/' + item,
           method: 'get'
@@ -180,6 +203,17 @@ export default {
         }).catch((err) => {
           console.log(err)
         })
+      }
+    }
+  },
+  activated() {
+    // 判断收藏是否改变
+    const vidList = Store.get('videoList')
+    if (vidList !== undefined && vidList.length > 0) {
+      const temp1 = this.vidList.slice(0)
+      const temp2 = vidList.slice(0)
+      if (temp1.length !== temp2.length || temp1.sort().toString() !== temp2.sort().toString()) {
+        this.vidList = vidList
       }
     }
   }

@@ -61,7 +61,7 @@ export default {
       return parsedWordArray.toString(CryptoJS.enc.Utf8)
     }
   },
-  mounted() {
+  created() {
     const videoList = Store.get('videoList')
     if (videoList === undefined || videoList.indexOf(this.vid) === -1) {
       this.type = 'info'
