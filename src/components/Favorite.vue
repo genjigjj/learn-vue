@@ -119,20 +119,20 @@ export default {
         this.totalVideos = this.vidList.length
         const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
         this.videosList = []
+        const axiosList = []
         for (const item of vidTempList) {
-          this.$axios({
-            url: 'https://api.avgle.com/v1/video/' + item,
-            method: 'get'
-          }).then((res) => {
-            const respon = res.data
-            if (respon.success) {
-              const video = respon.response.video
-              this.videosList.push(video)
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
+          const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
+          axiosList.push(tempAxios)
         }
+        this.$axios.all(axiosList).then(
+          resultArray => {
+            for (const result of resultArray) {
+              this.videosList.push(result.data.response.video)
+            }
+          }
+        ).catch((err) => {
+          console.log(err)
+        })
       }
     }
   },
@@ -164,21 +164,20 @@ export default {
       const vidTempList = this.vidList.slice((pageNo - 1) * 12, pageNo * 12)
       console.log(vidTempList)
       this.videosList = []
+      const axiosList = []
       for (const item of vidTempList) {
-        this.$axios({
-          url: 'https://api.avgle.com/v1/video/' + item,
-          method: 'get'
-        }).then((res) => {
-          const respon = res.data
-          if (respon.success) {
-            const video = respon.response.video
-            this.videosList.push(video)
-            console.log(this.videosList)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
+        const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
+        axiosList.push(tempAxios)
       }
+      this.$axios.all(axiosList).then(
+        resultArray => {
+          for (const result of resultArray) {
+            this.videosList.push(result.data.response.video)
+          }
+        }
+      ).catch((err) => {
+        console.log(err)
+      })
     },
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
@@ -192,20 +191,20 @@ export default {
       this.totalVideos = vidList.length
       const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
       this.videosList = []
+      const axiosList = []
       for (const item of vidTempList) {
-        this.$axios({
-          url: 'https://api.avgle.com/v1/video/' + item,
-          method: 'get'
-        }).then((res) => {
-          const respon = res.data
-          if (respon.success) {
-            const video = respon.response.video
-            this.videosList.push(video)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
+        const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
+        axiosList.push(tempAxios)
       }
+      this.$axios.all(axiosList).then(
+        resultArray => {
+          for (const result of resultArray) {
+            this.videosList.push(result.data.response.video)
+          }
+        }
+      ).catch((err) => {
+        console.log(err)
+      })
     }
   },
   activated() {
