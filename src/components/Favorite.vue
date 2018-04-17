@@ -162,7 +162,6 @@ export default {
     // 换页
     changePage(pageNo) {
       const vidTempList = this.vidList.slice((pageNo - 1) * 12, pageNo * 12)
-      console.log(vidTempList)
       this.videosList = []
       const axiosList = []
       for (const item of vidTempList) {

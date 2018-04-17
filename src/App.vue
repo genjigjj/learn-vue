@@ -20,13 +20,13 @@
           <el-col :span="6">
             <div class="search-input">
               <el-input v-model="inputValue" placeholder="请输入搜索内容" class="input-with-search">
-                <el-button @click="searchVideo" slot="append" icon="el-icon-search"></el-button>
+                <el-button @click.native="searchVideo" slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </div>
           </el-col>
         </el-row>
       </el-header>
-      <keep-alive include="index,favorite">
+      <keep-alive include="index,favorite,search">
         <router-view></router-view>
       </keep-alive>
     </el-container>
@@ -44,11 +44,11 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
-        this.$router.push({
-          name: 'search',
-          query: {
-            q: this.inputValue
-          }})
+        this.$store.dispatch('searchVideo', this.inputValue)
+        if (this.$route.name !== 'search') {
+          this.$router.push({
+            name: 'search' })
+        }
       }
     }
   }

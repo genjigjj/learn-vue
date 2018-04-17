@@ -2,7 +2,7 @@
   <div id="search">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(0,3)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(0,4)" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(4,7)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(4,8)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(8,11)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(8,12)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
@@ -95,12 +95,14 @@
 
 <script>
 import CryptoJS from 'crypto-js'
+import { mapState } from 'vuex'
+
 export default {
   name: 'search',
   data() {
     return {
-      videosList: [], // 视频列表
-      totalVideos: 0, // 总视频数
+/*      videosList: [], // 视频列表
+      totalVideos: 0, // 总视频数*/
       currentPage: 1, // 当前页数
       query: '' // 查询条件
     }
@@ -108,7 +110,10 @@ export default {
   computed: {
     getPageCount() {
       return Math.ceil(this.totalVideos / 12)
-    }
+    },
+    ...mapState([
+      'videosList', 'totalVideos'
+    ])
   },
   methods: {
     // 计算发布时间差
@@ -154,16 +159,14 @@ export default {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
-  },
-  created() {
-    this.query = this.$route.query.q
-  },
+  }/*,
   activated: function() {
+    this.query = this.$store.state.query
     this.$axios({
       params: {
         limit: 12
       },
-      url: 'https://api.avgle.com/v1/search/+' + encodeURIComponent(this.query) + '/' + (this.currentPage - 1),
+      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(this.query) + '/' + (this.currentPage - 1),
       method: 'get'
     }).then((res) => {
       const respon = res.data
@@ -174,7 +177,7 @@ export default {
     }).catch((err) => {
       console.log(err)
     })
-  }
+  }*/
 }
 </script>
 
