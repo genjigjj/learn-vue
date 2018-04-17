@@ -19,8 +19,8 @@
           </el-col>
           <el-col :span="6">
             <div class="search-input">
-              <el-input placeholder="请输入内容" class="input-with-search">
-                <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-input v-model="inputValue" placeholder="请输入搜索内容" class="input-with-search">
+                <el-button @click="searchVideo" slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </div>
           </el-col>
@@ -35,7 +35,23 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      inputValue: ''
+    }
+  },
+  methods: {
+    searchVideo() {
+      if (this.inputValue !== '') {
+        this.$router.push({
+          name: 'search',
+          query: {
+            q: this.inputValue
+          }})
+      }
+    }
+  }
 }
 </script>
 
