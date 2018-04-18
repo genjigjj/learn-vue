@@ -2,7 +2,7 @@
   <div id="index">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(0,3)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(0,4)" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(4,7)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(4,8)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(8,11)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(8,12)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
@@ -86,7 +86,6 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
-        :current-page.sync="currentPage"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -95,19 +94,17 @@
 
 <script>
 import CryptoJS from 'crypto-js'
+import { mapState } from 'vuex'
+
 export default {
   name: 'index',
-  data() {
-    return {
-      videosList: [], // 视频列表
-      totalVideos: 0, // 总视频数
-      currentPage: 1 // 当前页数
-    }
-  },
   computed: {
     getPageCount() {
       return Math.ceil(this.totalVideos / 12)
-    }
+    },
+    ...mapState(
+      ['videosList', 'totalVideos']
+    )
   },
   methods: {
     // 计算发布时间差
@@ -129,47 +126,18 @@ export default {
       const video = event.currentTarget
       video.load()
     },
-    filterList(begin, end) {
-      return this.videosList.slice(begin, end + 1)
-    },
+    // 换页
     changePage(pageNo) {
-      this.$axios({
-        params: {
-          limit: 12
-        },
-        url: 'https://api.avgle.com/v1/videos/' + (pageNo - 1),
-        method: 'get'
-      }).then((res) => {
-        const respon = res.data
-        if (respon.success) {
-          this.videosList = respon.response.videos
-          this.totalVideos = respon.response.total_videos
-        }
-      }).catch((err) => {
-        console.log(err)
-      })
+      this.$store.dispatch('getVideoInfo', { pageNo: pageNo })
     },
+    // 编码url
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  activated: function() {
-    this.$axios({
-      params: {
-        limit: 12
-      },
-      url: 'https://api.avgle.com/v1/videos/' + (this.currentPage - 1),
-      method: 'get'
-    }).then((res) => {
-      const respon = res.data
-      if (respon.success) {
-        this.videosList = respon.response.videos
-        this.totalVideos = respon.response.total_videos
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
+  created: function() {
+    this.$store.dispatch('getVideoInfo', { pageNo: 1 })
   }
 }
 </script>

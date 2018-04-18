@@ -12,8 +12,8 @@
             <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
                      active-text-color="#ffd04b" mode="horizontal" :router="true">
               <el-menu-item :index="'/favorites'">Favorites</el-menu-item>
-              <el-menu-item index="3">Categories</el-menu-item>
-              <el-menu-item index="2">Collections</el-menu-item>
+              <el-menu-item :index="'/categories'">Categories</el-menu-item>
+              <el-menu-item :index="'/collections'">Collections</el-menu-item>
               <el-menu-item index="/">Videos</el-menu-item>
             </el-menu>
           </el-col>
@@ -44,7 +44,7 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
-        this.$store.dispatch('searchVideo', this.inputValue)
+        this.$store.dispatch('searchVideoInfo', { queryValue: this.inputValue, pageNo: 0 })
         if (this.$route.name !== 'search') {
           this.$router.push({
             name: 'search' })

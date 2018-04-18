@@ -86,7 +86,6 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
-        :current-page.sync="currentPage"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -99,20 +98,12 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'search',
-  data() {
-    return {
-/*      videosList: [], // 视频列表
-      totalVideos: 0, // 总视频数*/
-      currentPage: 1, // 当前页数
-      query: '' // 查询条件
-    }
-  },
   computed: {
     getPageCount() {
       return Math.ceil(this.totalVideos / 12)
     },
     ...mapState([
-      'videosList', 'totalVideos'
+      'queryValue', 'videosList', 'totalVideos'
     ])
   },
   methods: {
@@ -135,49 +126,16 @@ export default {
       const video = event.currentTarget
       video.load()
     },
-    filterList(begin, end) {
-      return this.videosList.slice(begin, end + 1)
-    },
+    // 换页
     changePage(pageNo) {
-      this.$axios({
-        params: {
-          limit: 12
-        },
-        url: 'https://api.avgle.com/v1/search/+' + encodeURIComponent(this.query) + '/' + (pageNo - 1),
-        method: 'get'
-      }).then((res) => {
-        const respon = res.data
-        if (respon.success) {
-          this.videosList = respon.response.videos
-          this.totalVideos = respon.response.total_videos
-        }
-      }).catch((err) => {
-        console.log(err)
-      })
+      this.$store.dispatch('getVideoInfo', { queryValue: this.queryValue, pageNo: pageNo })
     },
+    // 编码url
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
-  }/*,
-  activated: function() {
-    this.query = this.$store.state.query
-    this.$axios({
-      params: {
-        limit: 12
-      },
-      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(this.query) + '/' + (this.currentPage - 1),
-      method: 'get'
-    }).then((res) => {
-      const respon = res.data
-      if (respon.success) {
-        this.videosList = respon.response.videos
-        this.totalVideos = respon.response.total_videos
-      }
-    }).catch((err) => {
-      console.log(err)
-    })
-  }*/
+  }
 }
 </script>
 

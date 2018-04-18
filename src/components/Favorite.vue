@@ -2,7 +2,7 @@
   <div id="index">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(0,3)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(0,4)" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(4,7)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(4,8)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in filterList(8,11)" :key="item.id">
+        <el-col :span="6" v-for="item in videosList.slice(8,12)" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
@@ -86,7 +86,6 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
-        :current-page.sync="currentPage"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -95,46 +94,18 @@
 
 <script>
 import CryptoJS from 'crypto-js'
-import Store from 'store'
+import { mapState } from 'vuex'
 
 export default {
   name: 'favorite',
-  data() {
-    return {
-      videosList: [], // 视频总列表
-      vidList: [],
-      totalVideos: 0, // 总视频数
-      currentPage: 1 // 当前页数
-    }
-  },
   computed: {
     getPageCount() {
       const pageCount = Math.ceil(this.totalVideos / 12)
       return pageCount
-    }
-  },
-  watch: {
-    vidList() {
-      if (this.vidList !== undefined && this.vidList.length > 0) {
-        this.totalVideos = this.vidList.length
-        const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
-        this.videosList = []
-        const axiosList = []
-        for (const item of vidTempList) {
-          const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
-          axiosList.push(tempAxios)
-        }
-        this.$axios.all(axiosList).then(
-          resultArray => {
-            for (const result of resultArray) {
-              this.videosList.push(result.data.response.video)
-            }
-          }
-        ).catch((err) => {
-          console.log(err)
-        })
-      }
-    }
+    },
+    ...mapState([
+      'vidList', 'videosList', 'totalVideos'
+    ])
   },
   methods: {
     // 计算发布时间差
@@ -156,27 +127,9 @@ export default {
       const video = event.currentTarget
       video.load()
     },
-    filterList(begin, end) {
-      return this.videosList.slice(begin, end + 1)
-    },
     // 换页
     changePage(pageNo) {
-      const vidTempList = this.vidList.slice((pageNo - 1) * 12, pageNo * 12)
-      this.videosList = []
-      const axiosList = []
-      for (const item of vidTempList) {
-        const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
-        axiosList.push(tempAxios)
-      }
-      this.$axios.all(axiosList).then(
-        resultArray => {
-          for (const result of resultArray) {
-            this.videosList.push(result.data.response.video)
-          }
-        }
-      ).catch((err) => {
-        console.log(err)
-      })
+      this.$store.dispatch('getFavoriteVideoList', { pageNo: pageNo })
     },
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
@@ -184,38 +137,7 @@ export default {
     }
   },
   created() {
-    const vidList = Store.get('videoList')
-    if (vidList !== undefined && vidList.length > 0) {
-      this.vidList = vidList
-      this.totalVideos = vidList.length
-      const vidTempList = this.vidList.slice((this.currentPage - 1) * 12, this.currentPage * 12)
-      this.videosList = []
-      const axiosList = []
-      for (const item of vidTempList) {
-        const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
-        axiosList.push(tempAxios)
-      }
-      this.$axios.all(axiosList).then(
-        resultArray => {
-          for (const result of resultArray) {
-            this.videosList.push(result.data.response.video)
-          }
-        }
-      ).catch((err) => {
-        console.log(err)
-      })
-    }
-  },
-  activated() {
-    // 判断收藏是否改变
-    const vidList = Store.get('videoList')
-    if (vidList !== undefined && vidList.length > 0) {
-      const temp1 = this.vidList.slice(0)
-      const temp2 = vidList.slice(0)
-      if (temp1.length !== temp2.length || temp1.sort().toString() !== temp2.sort().toString()) {
-        this.vidList = vidList
-      }
-    }
+    this.$store.dispatch('getFavoriteVideoList', { pageNo: 1 })
   }
 }
 </script>
