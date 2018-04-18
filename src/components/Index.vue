@@ -136,7 +136,7 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  created: function() {
+  created() {
     this.$store.dispatch('getVideoInfo', { pageNo: 1 })
   }
 }

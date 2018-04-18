@@ -22,11 +22,29 @@ export function searchVideo(query, pageNo) {
   })
 }
 
+// 通过id获取视频信息
 export function getFavorites(vidList) {
   const axiosList = []
   for (const item of vidList) {
-    const tempAxios = this.$axios.get('https://api.avgle.com/v1/video/' + item)
+    const tempAxios = axios.get('https://api.avgle.com/v1/video/' + item)
     axiosList.push(tempAxios)
   }
   return axios.all(axiosList)
 }
+
+// 获取分类
+export function getCategories() {
+  return axios.get('https://api.avgle.com/v1/categories')
+}
+
+// 获取收藏
+export function getCollections(pageNo) {
+  return axios({
+    params: {
+      limit: 12
+    },
+    url: 'https://api.avgle.com/v1/collections/' + pageNo,
+    method: 'get'
+  })
+}
+
