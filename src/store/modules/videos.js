@@ -8,8 +8,8 @@ const state = {
   vidList: []
 }
 const getters = {
-  getQueryInfo(state) {
-    return state
+  videosGetter(state) {
+    return state.videosList
   }
 }
 const mutations = {
