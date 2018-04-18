@@ -37,7 +37,7 @@ const actions = {
   // 获取全部视频信息
   getVideoInfo({ commit }, params) {
     const data = {}
-    getVideos(params.pageNo)
+    getVideos(params)
       .then((res) => {
         const respon = res.data
         if (respon.success) {

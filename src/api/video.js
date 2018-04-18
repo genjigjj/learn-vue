@@ -1,14 +1,25 @@
 import axios from 'axios'
 
 // 获取全部视频
-export function getVideos(pageNo) {
-  return axios({
-    params: {
-      limit: 12
-    },
-    url: 'https://api.avgle.com/v1/videos/' + (pageNo - 1),
-    method: 'get'
-  })
+export function getVideos(params) {
+  if (params.c !== undefined) {
+    return axios({
+      params: {
+        limit: 12,
+        c: params.c
+      },
+      url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
+      method: 'get'
+    })
+  } else {
+    return axios({
+      params: {
+        limit: 12
+      },
+      url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
+      method: 'get'
+    })
+  }
 }
 
 // 查询视频

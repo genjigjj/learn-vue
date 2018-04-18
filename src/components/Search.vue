@@ -10,7 +10,7 @@
                   v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -36,7 +36,7 @@
                   v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -62,7 +62,7 @@
                  v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -134,7 +134,8 @@ export default {
     // 重新加载
     reloadVideo(event) {
       const video = event.currentTarget
-      video.load()
+      video.pause()
+      video.currentTime = 0
     },
     // 换页
     changePage(pageNo) {

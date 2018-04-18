@@ -3,44 +3,152 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
            <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
+             <el-row>
+               <el-col :span="16">
+                 <div class="pull-left">
+                   {{item.name}}
+                 </div>
+               </el-col>
+               <el-col :span="8">
+                 <div class="pull-right">
+                   <span class="badge">{{item.total_videos}}</span>
+                 </div>
+               </el-col>
+             </el-row>
            </el-card>
+          </router-link>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
-           <el-card :body-style="{ padding: '0px' }">
-             <img :src="item.cover_url" />
-           </el-card>
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="item.cover_url" />
+              <el-row>
+                <el-col :span="16">
+                  <div class="pull-left">
+                    {{item.name}}
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="pull-right">
+                    <span class="badge">{{item.total_videos}}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </router-link>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
-           <el-card :body-style="{ padding: '0px' }">
-             <img :src="item.cover_url" />
-           </el-card>
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="item.cover_url" />
+              <el-row>
+                <el-col :span="16">
+                  <div class="pull-left">
+                    {{item.name}}
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="pull-right">
+                    <span class="badge">{{item.total_videos}}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </router-link>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[3]" :key="item.id">
-           <el-card :body-style="{ padding: '0px' }">
-             <img :src="item.cover_url" />
-           </el-card>
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="item.cover_url" />
+              <el-row>
+                <el-col :span="16">
+                  <div class="pull-left">
+                    {{item.name}}
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="pull-right">
+                    <span class="badge">{{item.total_videos}}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </router-link>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[4]" :key="item.id">
-           <el-card :body-style="{ padding: '0px' }">
-             <img :src="item.cover_url" />
-           </el-card>
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="item.cover_url" />
+              <el-row>
+                <el-col :span="16">
+                  <div class="pull-left">
+                    {{item.name}}
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="pull-right">
+                    <span class="badge">{{item.total_videos}}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </router-link>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[5]" :key="item.id">
-           <el-card :body-style="{ padding: '0px' }">
-             <img :src="item.cover_url" />
-           </el-card>
+          <router-link :to="{
+                 name : 'category',
+                 params : {
+                 c : item.CHID
+                 }}">
+            <el-card :body-style="{ padding: '0px' }">
+              <img :src="item.cover_url" />
+              <el-row>
+                <el-col :span="16">
+                  <div class="pull-left">
+                    {{item.name}}
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="pull-right">
+                    <span class="badge">{{item.total_videos}}</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
+          </router-link>
         </el-col>
       </el-row>
     </el-main>
@@ -70,5 +178,45 @@ export default {
 
   .el-col {
     border-radius: 4px;
+  }
+
+  img{
+    width: 100%;
+  }
+
+  .el-card .el-row{
+    border: 0;
+    background-color: rgba(0,0,0,.7);
+    color: #fff;
+    padding: 3px 5px;
+    font-size: 16px;
+    margin-bottom: 0px;
+    margin-top: -10%;
+  }
+
+  .pull-left{
+    float: left;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pull-right{
+    float: right;
+    text-align: right;
+  }
+
+  .badge{
+    color: #fff;
+    background-color: #2a9fd6;
+    min-width: 16px;
+    padding: 0 6px;
+    line-height: 19px;
+    font-size: 12px;
+    display: inline-block;
+    font-weight: 700;
+    border-radius: 10px;
+    text-align: center;
   }
 </style>

@@ -10,7 +10,7 @@
                   v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -36,7 +36,7 @@
                   v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -62,7 +62,7 @@
                  v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;">
@@ -133,11 +133,16 @@ export default {
     // 重新加载
     reloadVideo(event) {
       const video = event.currentTarget
-      video.load()
+      video.pause()
+      video.currentTime = 0
     },
     // 换页
     changePage(pageNo) {
-      this.$store.dispatch('getVideoInfo', { pageNo: pageNo })
+      if (this.$route.name === 'category') {
+        this.$store.dispatch('getVideoInfo', { pageNo: pageNo, c: this.$route.params.c })
+      } else {
+        this.$store.dispatch('getVideoInfo', { pageNo: pageNo })
+      }
     },
     // 编码url
     encodeUrl(url) {
@@ -146,7 +151,11 @@ export default {
     }
   },
   activated() {
-    this.$store.dispatch('getVideoInfo', { pageNo: this.currentPage })
+    if (this.$route.name === 'category') {
+      this.$store.dispatch('getVideoInfo', { pageNo: this.currentPage, c: this.$route.params.c })
+    } else {
+      this.$store.dispatch('getVideoInfo', { pageNo: this.currentPage })
+    }
   }
 }
 </script>
