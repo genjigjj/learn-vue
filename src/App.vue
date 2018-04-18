@@ -44,7 +44,7 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
-        this.$store.dispatch('searchVideoInfo', { queryValue: this.inputValue, pageNo: 0 })
+        this.$store.dispatch('searchVideoInfo', { queryValue: this.inputValue, pageNo: 1 })
         if (this.$route.name !== 'search') {
           this.$router.push({
             name: 'search' })

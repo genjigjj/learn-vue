@@ -1,16 +1,20 @@
-import { getCategories } from 'src/api/video'
+import { getCategories } from '@/api/video'
 
 const state = {
   categories: []
 }
 const getters = {
   categoriesGetter(state) {
-    return state.categories
+    const sliceList = []
+    for (let i = 0; i < 6; i++) {
+      sliceList.push(state.categories.slice(i * 4, (i + 1) * 4))
+    }
+    return sliceList
   }
 }
 const mutations = {
   SET_CATEGORIES_STATE(state, data) {
-    state.categories = data.categories
+    state.categories = data
   }
 }
 const actions = {

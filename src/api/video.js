@@ -17,7 +17,7 @@ export function searchVideo(query, pageNo) {
     params: {
       limit: 12
     },
-    url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(query) + pageNo,
+    url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(query) + '/' + (pageNo - 1),
     method: 'get'
   })
 }
@@ -43,7 +43,7 @@ export function getCollections(pageNo) {
     params: {
       limit: 12
     },
-    url: 'https://api.avgle.com/v1/collections/' + pageNo,
+    url: 'https://api.avgle.com/v1/collections/' + (pageNo - 1),
     method: 'get'
   })
 }

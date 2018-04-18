@@ -1,4 +1,4 @@
-import { searchVideo, getFavorites, getVideos } from 'src/api/video'
+import { searchVideo, getFavorites, getVideos } from '@/api/video'
 import Store from 'store'
 
 const state = {
@@ -8,8 +8,13 @@ const state = {
   vidList: []
 }
 const getters = {
+  // 返回三个数组
   videosGetter(state) {
-    return state.videosList
+    const sliceList = []
+    for (let i = 0; i < 3; i++) {
+      sliceList.push(state.videosList.slice(i * 4, (i + 1) * 4))
+    }
+    return sliceList
   }
 }
 const mutations = {
@@ -73,7 +78,7 @@ const actions = {
     if (vidList !== undefined && vidList.length > 0) {
       data.vidList = vidList
       data.totalVideos = vidList.length
-      getFavorites(params.vidList.slice((params.pageNo - 1) * 12, params.pageNo * 12))
+      getFavorites(vidList.slice((params.pageNo - 1) * 12, params.pageNo * 12))
         .then(
           resultArray => {
             for (const result of resultArray) {

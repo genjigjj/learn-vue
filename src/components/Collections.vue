@@ -2,22 +2,22 @@
   <div id="collections">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in collections.slice(0,4)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in collections.slice(4,8)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in collections.slice(8,12)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
@@ -29,6 +29,7 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
+        :currentPage.sync="currentPage"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -36,16 +37,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'collections',
+  data() {
+    return {
+      currentPage: 1
+    }
+  },
   computed: {
+    ...mapState({
+      totalCollections: state => state.collections.totalCollections
+    }),
+    ...mapGetters({
+      sliceList: 'collectionsGetter'
+    }),
     getPageCount() {
-      return Math.ceil(this.totalVideos / 12)
-    },
-    ...mapState(
-      ['collections'])
+      return Math.ceil(this.totalCollections / 12)
+    }
   },
   methods: {
     // 换页
@@ -54,7 +64,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getCollectionsInfo', { pageNo: 0 })
+    this.$store.dispatch('getCollectionsInfo', { pageNo: this.currentPage })
   }
 }
 </script>
@@ -71,4 +81,5 @@ export default {
   .el-pagination {
     text-align: center;
   }
+
 </style>

@@ -1,4 +1,4 @@
-import { getCollections } from 'src/api/video'
+import { getCollections } from '@/api/video'
 
 const state = {
   collections: [],
@@ -6,7 +6,11 @@ const state = {
 }
 const getters = {
   collectionsGetter(state) {
-    return state.collections
+    const sliceList = []
+    for (let i = 0; i < 3; i++) {
+      sliceList.push(state.collections.slice(i * 4, (i + 1) * 4))
+    }
+    return sliceList
   }
 }
 const mutations = {

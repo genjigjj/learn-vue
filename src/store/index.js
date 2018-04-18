@@ -6,10 +6,10 @@ import collections from './modules/collections'
 
 Vue.use(Vuex)
 
-export default {
+export default new Vuex.Store({
   modules: {
     videos,
     categories,
     collections
   }
-}
+})

@@ -2,7 +2,7 @@
   <div id="index">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in videosList.slice(0,4)" :key="item.id">
+        <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -28,7 +28,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in videosList.slice(4,8)" :key="item.id">
+        <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in videosList.slice(8,12)" :key="item.id">
+        <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
@@ -86,6 +86,7 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
+        :currentPage.sync="currentPage"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -94,18 +95,26 @@
 
 <script>
 import CryptoJS from 'crypto-js'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'favorite',
+  data() {
+    return {
+      currentPage: 1
+    }
+  },
   computed: {
+    ...mapState({
+      totalVideos: state => state.videos.totalVideos
+    }),
+    ...mapGetters({
+      sliceList: 'videosGetter'
+    }),
     getPageCount() {
       const pageCount = Math.ceil(this.totalVideos / 12)
       return pageCount
-    },
-    ...mapState([
-      'vidList', 'videosList', 'totalVideos'
-    ])
+    }
   },
   methods: {
     // 计算发布时间差
@@ -136,8 +145,8 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  created() {
-    this.$store.dispatch('getFavoriteVideoList', { pageNo: 1 })
+  activated() {
+    this.$store.dispatch('getFavoriteVideoList', { pageNo: this.currentPage })
   }
 }
 </script>

@@ -2,29 +2,43 @@
   <div id="categories">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="4" v-for="item in categories.slice(0,6)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="4" v-for="item in categories.slice(6,12)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="4" v-for="item in categories.slice(12,18)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="4" v-for="item in categories.slice(18,24)" :key="item.id">
-           <el-card>
+        <el-col :span="6" v-for="item in sliceList[3]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
+             <img :src="item.cover_url" />
+           </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6" v-for="item in sliceList[4]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
+             <img :src="item.cover_url" />
+           </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6" v-for="item in sliceList[5]" :key="item.id">
+           <el-card :body-style="{ padding: '0px' }">
              <img :src="item.cover_url" />
            </el-card>
         </el-col>
@@ -34,13 +48,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'categories',
   computed: {
-    ...mapState(
-      ['categories'])
+    ...mapGetters({
+      sliceList: 'categoriesGetter'
+    })
   },
   created() {
     this.$store.dispatch('getCategoriesInfo')
