@@ -13,7 +13,7 @@
               <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;">
+              <div style="padding: 14px;" :title="item.title" >
                 <span>{{item.title}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{countAddTime(item)}}</time>
@@ -39,7 +39,7 @@
               <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;">
+              <div style="padding: 14px;" :title="item.title" >
                 <span>{{item.title}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{countAddTime(item)}}</time>
@@ -65,7 +65,7 @@
               <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;">
+              <div style="padding: 14px;" :title="item.title" >
                 <span>{{item.title}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{countAddTime(item)}}</time>
