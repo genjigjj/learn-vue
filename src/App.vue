@@ -19,7 +19,7 @@
           </el-col>
           <el-col :span="6">
             <div class="search-input">
-              <el-input v-model="inputValue" placeholder="请输入搜索内容" class="input-with-search">
+              <el-input v-model="inputValue" @keyup.native.enter="searchVideo" placeholder="请输入搜索内容" class="input-with-search">
                 <el-button @click.native="searchVideo" slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </div>

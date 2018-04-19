@@ -139,7 +139,11 @@ export default {
     },
     // 换页
     changePage(pageNo) {
-      this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: pageNo })
+      if (this.$route.name === 'search') {
+        this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: pageNo })
+      } else {
+        this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo })
+      }
     },
     // 编码url
     encodeUrl(url) {
@@ -148,7 +152,11 @@ export default {
     }
   },
   activated() {
-    this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: this.currentPage })
+    if (this.$route.name === 'search') {
+      this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: this.currentPage })
+    } else {
+      this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: this.currentPage })
+    }
   }
 }
 </script>

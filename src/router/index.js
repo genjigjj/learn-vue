@@ -46,6 +46,11 @@ export default new Router({
       name: 'category',
       path: '/category/:c',
       component: IndexView
+    },
+    {
+      name: 'collection',
+      path: '/collection/:c',
+      component: SearchView
     }
   ]
 })
