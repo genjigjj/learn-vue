@@ -24,13 +24,18 @@ export function getVideos(params) {
 
 // 查询视频
 export function searchVideo(query, pageNo) {
-  return axios({
-    params: {
-      limit: 12
-    },
-    url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(query) + '/' + (pageNo - 1),
-    method: 'get'
-  })
+  if (query !== undefined && query !== '') {
+    return axios({
+      params: {
+        limit: 12
+      },
+      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(query) + '/' + (pageNo - 1),
+      method: 'get'
+    })
+  } else {
+    /* eslint-disable */
+    return Promise.reject('error')
+  }
 }
 
 // 通过id获取视频信息

@@ -9,7 +9,8 @@
                  c : item.keyword
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <img :src="item.cover_url" />
+              <img v-if="item.id === '4'" src="https://static.avgle.com/media/videos/tmb/921/1.jpg" />
+              <img v-else :src="item.cover_url" />
               <el-row>
                 <el-col :span="16">
                   <div class="pull-left">
@@ -83,7 +84,7 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
-        :currentPage.sync="currentPage"
+        :currentPage.sync="currentPageNo"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -95,11 +96,6 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'collections',
-  data() {
-    return {
-      currentPage: 1
-    }
-  },
   computed: {
     ...mapState({
       totalCollections: state => state.collections.totalCollections
@@ -109,6 +105,13 @@ export default {
     }),
     getPageCount() {
       return Math.ceil(this.totalCollections / 12)
+    },
+    currentPageNo: {
+      get() {
+        return this.$store.state.collections.pageNo
+      },
+      set(val) {
+      }
     }
   },
   methods: {
@@ -118,7 +121,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getCollectionsInfo', { pageNo: this.currentPage })
+    this.$store.dispatch('getCollectionsInfo', { pageNo: this.currentPageNo })
   }
 }
 </script>

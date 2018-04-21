@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import IndexView from '../components/Index'
+import store from '@/store'
+import MainView from '../components/main'
 import VideoView from '../components/Video'
-import FavoriteView from '../components/Favorite'
-import SearchView from '../components/Search'
 import CategoriesView from '../components/Categories'
 import CollectionsView from '../components/Collections'
 
@@ -13,9 +12,9 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      name: 'index',
+      name: 'main',
       path: '/',
-      component: IndexView
+      component: MainView
     },
     {
       name: 'video',
@@ -25,32 +24,40 @@ export default new Router({
     {
       name: 'favorites',
       path: '/favorites',
-      component: FavoriteView
+      component: MainView
     },
     {
       name: 'search',
       path: '/search',
-      component: SearchView
+      component: MainView
     },
     {
       name: 'categories',
       path: '/categories',
-      component: CategoriesView
+      component: CategoriesView,
+      beforeEnter: (to, from, next) => {
+        store.commit('SET_PAGENO', 1)
+        next()
+      }
     },
     {
       name: 'collections',
       path: '/collections',
-      component: CollectionsView
+      component: CollectionsView,
+      beforeEnter: (to, from, next) => {
+        store.commit('SET_PAGENO', 1)
+        next()
+      }
     },
     {
       name: 'category',
       path: '/category/:c',
-      component: IndexView
+      component: MainView
     },
     {
       name: 'collection',
       path: '/collection/:c',
-      component: SearchView
+      component: MainView
     }
   ]
 })

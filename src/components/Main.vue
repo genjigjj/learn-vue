@@ -1,5 +1,5 @@
 <template>
-  <div id="search">
+  <div id="main">
     <el-main>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
@@ -10,7 +10,7 @@
                   v : item.vid
                  }}">
             <el-card :body-style="{ padding: '0px' }">
-              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+              <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;" :title="item.title" >
@@ -86,7 +86,7 @@
         layout="prev, pager, next"
         :page-size="12"
         :page-count="getPageCount"
-        :currentPage.sync="currentPage"
+        :currentPage.sync="currentPageNo"
         @current-change="changePage">
       </el-pagination>
     </el-footer>
@@ -98,12 +98,7 @@ import CryptoJS from 'crypto-js'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: 'search',
-  data() {
-    return {
-      currentPage: 1
-    }
-  },
+  name: 'Main',
   computed: {
     ...mapState({
       queryValue: state => state.videos.queryValue,
@@ -114,6 +109,13 @@ export default {
     }),
     getPageCount() {
       return Math.ceil(this.totalVideos / 12)
+    },
+    currentPageNo: {
+      get() {
+        return this.$store.state.videos.pageNo
+      },
+      set(val) {
+      }
     }
   },
   methods: {
@@ -134,15 +136,36 @@ export default {
     // 重新加载
     reloadVideo(event) {
       const video = event.currentTarget
-      video.pause()
-      video.currentTime = 0
+      // 安全暂停播放视频
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          video.pause()
+          video.currentTime = 0
+        })
+          .catch(error => {
+            console.log(error)
+          })
+      }
     },
     // 换页
     changePage(pageNo) {
-      if (this.$route.name === 'search') {
-        this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: pageNo })
-      } else {
-        this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo })
+      switch (this.$route.name) {
+        case 'main':
+          this.$store.dispatch('getVideoInfo', { pageNo: pageNo })
+          break
+        case 'category':
+          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, c: this.$route.params.c })
+          break
+        case 'favorites':
+          this.$store.dispatch('getFavoriteVideoList', { pageNo: pageNo })
+          break
+        case 'search':
+          this.$store.dispatch('searchVideoInfo', { pageNo: pageNo, queryValue: this.queryValue })
+          break
+        case 'collection':
+          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo })
+          break
       }
     },
     // 编码url
@@ -151,11 +174,23 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     }
   },
-  activated() {
-    if (this.$route.name === 'search') {
-      this.$store.dispatch('searchVideoInfo', { queryValue: this.queryValue, pageNo: this.currentPage })
-    } else {
-      this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: this.currentPage })
+  created() {
+    switch (this.$route.name) {
+      case 'main':
+        this.$store.dispatch('getVideoInfo', { pageNo: this.currentPageNo })
+        break
+      case 'category':
+        this.$store.dispatch('getVideoInfo', { pageNo: this.currentPageNo, c: this.$route.params.c })
+        break
+      case 'favorites':
+        this.$store.dispatch('getFavoriteVideoList', { pageNo: this.currentPageNo })
+        break
+      case 'search':
+        this.$store.dispatch('searchVideoInfo', { pageNo: this.currentPageNo, queryValue: this.queryValue })
+        break
+      case 'collection':
+        this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: this.currentPageNo })
+        break
     }
   }
 }

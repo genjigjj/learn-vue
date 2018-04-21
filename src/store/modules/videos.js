@@ -3,6 +3,7 @@ import Store from 'store'
 
 const state = {
   queryValue: '',
+  pageNo: 1,
   videosList: [],
   totalVideos: 0,
   vidList: []
@@ -20,23 +21,33 @@ const getters = {
 const mutations = {
   SET_SEARCH_STATE(state, data) {
     state.queryValue = data.queryValue
+    state.pageNo = data.pageNo
     state.videosList = data.videosList
     state.totalVideos = data.totalVideos
   },
   SET_VIDEO_STATE(state, data) {
+    state.pageNo = data.pageNo
     state.videosList = data.videosList
     state.totalVideos = data.totalVideos
   },
   SET_VIDEOS_LIST(state, data) {
+    state.pageNo = data.pageNo
     state.videosList = data.videosList
     state.totalVideos = data.totalVideos
     state.vidList = data.vidList
+  },
+  SET_PAGENO(state, pageNo) {
+    state.pageNo = pageNo
+  },
+  SET_QUERYVALUE(state, queryValue) {
+    state.queryValue = queryValue
   }
 }
 const actions = {
   // 获取全部视频信息
   getVideoInfo({ commit }, params) {
     const data = {}
+    data.pageNo = params.pageNo
     getVideos(params)
       .then((res) => {
         const respon = res.data
@@ -53,6 +64,7 @@ const actions = {
   // 查询视频信息
   searchVideoInfo({ commit }, params) {
     const data = {}
+    data.pageNo = params.pageNo
     data.queryValue = params.queryValue
     searchVideo(params.queryValue, params.pageNo)
       .then((res) => {
@@ -74,6 +86,7 @@ const actions = {
       totalVideos: 0,
       vidList: []
     }
+    data.pageNo = params.pageNo
     const vidList = Store.get('videoList')
     if (vidList !== undefined && vidList.length > 0) {
       data.vidList = vidList
