@@ -1,6 +1,32 @@
 <template>
   <div id="main">
     <el-main>
+      <el-row :gutter="20" v-if="$route.name !== 'favorites'">
+        <el-form>
+          <el-form-item :label="labelName">
+            <el-col :span="4">
+              <el-select v-model="time" placeholder="TimeLine" @change="select">
+                <el-option
+                  v-for="item in optionsA"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="order" placeholder="OrderBy" @change="select">
+                <el-option
+                  v-for="item in optionsB"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
           <router-link :to="{
@@ -99,6 +125,58 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'Main',
+  data() {
+    return {
+      optionsA: [
+        {
+          value: 'a',
+          label: 'All'
+        },
+        {
+          value: 't',
+          label: 'Added Today'
+        },
+        {
+          value: 'w',
+          label: 'Added This Week'
+        },
+        {
+          value: 'm',
+          label: 'Added This Month'
+        }],
+      optionsB: [
+        {
+          value: 'bw',
+          label: 'Being Watched'
+        },
+        {
+          value: 'mr',
+          label: 'Most Recent'
+        },
+        {
+          value: 'mv',
+          label: 'Most View'
+        },
+        {
+          value: 'mc',
+          label: 'Most Commented'
+        },
+        {
+          value: 'tr',
+          label: 'Top Rated'
+        },
+        {
+          value: 'tf',
+          label: 'Top Favorites'
+        },
+        {
+          value: 'lg',
+          label: 'Longest'
+        }],
+      order: '',
+      time: ''
+    }
+  },
   computed: {
     ...mapState({
       queryValue: state => state.videos.queryValue,
@@ -115,6 +193,18 @@ export default {
         return this.$store.state.videos.pageNo
       },
       set(val) {
+      }
+    },
+    labelName() {
+      switch (this.$route.name) {
+        case 'main':
+          return 'Videos'
+        case 'collection':
+          return 'Collections'
+        case 'category':
+          return 'Categories'
+        case 'search':
+          return 'Search'
       }
     }
   },
@@ -152,19 +242,19 @@ export default {
     changePage(pageNo) {
       switch (this.$route.name) {
         case 'main':
-          this.$store.dispatch('getVideoInfo', { pageNo: pageNo })
+          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, t: this.time, o: this.order })
           break
         case 'category':
-          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, c: this.$route.params.c })
+          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, c: this.$route.params.c, t: this.time, o: this.order })
           break
         case 'favorites':
           this.$store.dispatch('getFavoriteVideoList', { pageNo: pageNo })
           break
         case 'search':
-          this.$store.dispatch('searchVideoInfo', { pageNo: pageNo, queryValue: this.queryValue })
+          this.$store.dispatch('searchVideoInfo', { pageNo: pageNo, queryValue: this.queryValue, t: this.time, o: this.order })
           break
         case 'collection':
-          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo })
+          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo, t: this.time, o: this.order })
           break
       }
     },
@@ -172,6 +262,27 @@ export default {
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
       return CryptoJS.enc.Base64.stringify(wordArray)
+    },
+    select() {
+      const queryParams = {
+        t: this.time,
+        o: this.order
+      }
+      this.$store.commit('SET_QUERYPARAMS', queryParams)
+      switch (this.$route.name) {
+        case 'main':
+          this.$store.dispatch('getVideoInfo', { pageNo: 1, t: this.time, o: this.order })
+          break
+        case 'category':
+          this.$store.dispatch('getVideoInfo', { pageNo: 1, c: this.$route.params.c, t: this.time, o: this.order })
+          break
+        case 'search':
+          this.$store.dispatch('searchVideoInfo', { pageNo: 1, queryValue: this.queryValue, t: this.time, o: this.order })
+          break
+        case 'collection':
+          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: 1, t: this.time, o: this.order })
+          break
+      }
     }
   },
   created() {
@@ -203,6 +314,10 @@ export default {
 
   .el-col {
     border-radius: 4px;
+  }
+
+  .el-form{
+    margin-left: 10px;
   }
 
   .time {
@@ -245,7 +360,7 @@ export default {
     clear: both
   }
 
-  span {
+  .el-card span {
     color: #2a9fd6;
     font-size: 16px;
     display: -webkit-box;

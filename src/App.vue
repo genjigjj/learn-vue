@@ -42,18 +42,23 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
-        if (this.$route.name === 'search') {
-          this.$store.dispatch('searchVideoInfo', { queryValue: this.inputValue, pageNo: 1 })
-        } else {
-          this.$store.commit('SET_QUERYVALUE', this.inputValue)
-          this.$router.push({ name: 'search' })
-        }
+        this.$store.dispatch('searchVideoInfo', {
+          queryValue: this.inputValue,
+          pageNo: 1,
+          t: this.$store.state.videos.queryParams.t,
+          o: this.$store.state.videos.queryParams.o })
+        this.$store.commit('SET_QUERYVALUE', this.inputValue)
+        this.$router.push({ name: 'search' })
       }
     },
     handleSelect(key) {
       switch (key) {
         case '/':
-          this.$store.dispatch('getVideoInfo', { pageNo: 1 })
+          this.$store.dispatch('getVideoInfo', {
+            pageNo: 1,
+            t: this.$store.state.videos.queryParams.t,
+            o: this.$store.state.videos.queryParams.o
+          })
           break
         case '/favorites':
           this.$store.dispatch('getFavoriteVideoList', { pageNo: 1 })

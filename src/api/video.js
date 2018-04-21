@@ -2,34 +2,41 @@ import axios from 'axios'
 
 // 获取全部视频
 export function getVideos(params) {
-  if (params.c !== undefined) {
-    return axios({
-      params: {
-        limit: 12,
-        c: params.c
-      },
-      url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
-      method: 'get'
-    })
-  } else {
-    return axios({
-      params: {
-        limit: 12
-      },
-      url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
-      method: 'get'
-    })
+  const queryParams = {}
+  queryParams.limit = 12
+  if (params.c !== undefined && params.c !== '') {
+    queryParams.c = params.c
   }
+  if (params.t !== undefined && params.t !== '') {
+    queryParams.t = params.t
+  }
+  if (params.o !== undefined && params.o !== '') {
+    queryParams.o = params.o
+  }
+  return axios({
+    params: queryParams,
+    url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
+    method: 'get'
+  })
 }
 
 // 查询视频
-export function searchVideo(query, pageNo) {
-  if (query !== undefined && query !== '') {
+export function searchVideo(params) {
+  if (params.queryValue !== undefined && params.queryValue !== '') {
+    const queryParams = {}
+    queryParams.limit = 12
+    if (params.c !== undefined && params.c !== '') {
+      queryParams.c = params.c
+    }
+    if (params.t !== undefined && params.t !== '') {
+      queryParams.t = params.t
+    }
+    if (params.o !== undefined && params.o !== '') {
+      queryParams.o = params.o
+    }
     return axios({
-      params: {
-        limit: 12
-      },
-      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(query) + '/' + (pageNo - 1),
+      params: queryParams,
+      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(params.queryValue) + '/' + (params.pageNo - 1),
       method: 'get'
     })
   } else {
@@ -39,9 +46,9 @@ export function searchVideo(query, pageNo) {
 }
 
 // 通过id获取视频信息
-export function getFavorites(vidList) {
+export function getFavorites(params) {
   const axiosList = []
-  for (const item of vidList) {
+  for (const item of params.vidList) {
     const tempAxios = axios.get('https://api.avgle.com/v1/video/' + item)
     axiosList.push(tempAxios)
   }

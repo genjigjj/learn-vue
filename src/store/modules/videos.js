@@ -4,6 +4,7 @@ import Store from 'store'
 const state = {
   queryValue: '',
   pageNo: 1,
+  queryParams: {},
   videosList: [],
   totalVideos: 0,
   vidList: []
@@ -41,17 +42,20 @@ const mutations = {
   },
   SET_QUERYVALUE(state, queryValue) {
     state.queryValue = queryValue
+  },
+  SET_QUERYPARAMS(state, queryParams) {
+    state.queryParams = queryParams
   }
 }
 const actions = {
   // 获取全部视频信息
   getVideoInfo({ commit }, params) {
-    const data = {}
-    data.pageNo = params.pageNo
     getVideos(params)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
+          const data = {}
+          data.pageNo = params.pageNo
           data.videosList = respon.response.videos
           data.totalVideos = respon.response.total_videos
           commit('SET_VIDEO_STATE', data)
@@ -63,13 +67,13 @@ const actions = {
   },
   // 查询视频信息
   searchVideoInfo({ commit }, params) {
-    const data = {}
-    data.pageNo = params.pageNo
-    data.queryValue = params.queryValue
-    searchVideo(params.queryValue, params.pageNo)
+    searchVideo(params)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
+          const data = {}
+          data.pageNo = params.pageNo
+          data.queryValue = params.queryValue
           data.videosList = respon.response.videos
           data.totalVideos = respon.response.total_videos
           commit('SET_SEARCH_STATE', data)
@@ -81,22 +85,23 @@ const actions = {
   },
   // 获取收藏的视频列表
   getFavoriteVideoList({ commit }, params) {
-    const data = {
-      videosList: [],
-      totalVideos: 0,
-      vidList: []
-    }
-    data.pageNo = params.pageNo
     const vidList = Store.get('videoList')
     if (vidList !== undefined && vidList.length > 0) {
-      data.vidList = vidList
-      data.totalVideos = vidList.length
-      getFavorites(vidList.slice((params.pageNo - 1) * 12, params.pageNo * 12))
+      params.vidList = vidList.slice((params.pageNo - 1) * 12, params.pageNo * 12)
+      getFavorites(params)
         .then(
           resultArray => {
+            const data = {
+              videosList: [],
+              totalVideos: 0,
+              vidList: []
+            }
+            data.pageNo = params.pageNo
             for (const result of resultArray) {
               data.videosList.push(result.data.response.video)
             }
+            data.vidList = vidList
+            data.totalVideos = vidList.length
             commit('SET_VIDEOS_LIST', data)
           }
         ).catch((err) => {
