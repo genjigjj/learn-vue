@@ -10,7 +10,7 @@
           </el-col>
           <el-col :span="10">
             <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
-               @select="handleSelect" active-text-color="#ffd04b" mode="horizontal" :router="true">
+               active-text-color="#ffd04b" mode="horizontal" :router="true">
               <el-menu-item :index="'/favorites'">Favorites</el-menu-item>
               <el-menu-item :index="'/categories'">Categories</el-menu-item>
               <el-menu-item :index="'/collections'">Collections</el-menu-item>
@@ -42,30 +42,9 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
-        this.$store.dispatch('searchVideoInfo', {
-          queryValue: this.inputValue,
-          pageNo: 1,
-          t: this.$store.state.videos.queryParams.t,
-          o: this.$store.state.videos.queryParams.o })
-        this.$store.commit('SET_QUERYVALUE', this.inputValue)
+        this.$store.commit('setQueryValue', this.inputValue)
+        this.$store.dispatch('searchVideoInfo')
         this.$router.push({ name: 'search' })
-      }
-    },
-    handleSelect(key) {
-      switch (key) {
-        case '/':
-          this.$store.dispatch('getVideoInfo', {
-            pageNo: 1,
-            t: this.$store.state.videos.queryParams.t,
-            o: this.$store.state.videos.queryParams.o
-          })
-          break
-        case '/favorites':
-          this.$store.dispatch('getFavoriteVideoList', { pageNo: 1 })
-          break
-        case '/category':
-          this.$store.dispatch('getVideoInfo', { pageNo: 1, c: this.$route.params.c })
-          break
       }
     }
   }

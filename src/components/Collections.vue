@@ -6,7 +6,7 @@
           <router-link :to="{
                  name : 'collection',
                  params : {
-                 c : item.keyword
+                 q : item.keyword
                  }}">
             <el-card :body-style="{ padding: '0px' }">
               <img v-if="item.id === '4'" src="https://static.avgle.com/media/videos/tmb/921/1.jpg" />
@@ -32,7 +32,7 @@
           <router-link :to="{
                  name : 'collection',
                  params : {
-                 c : item.keyword
+                 q : item.keyword
                  }}">
             <el-card :body-style="{ padding: '0px' }">
               <img :src="item.cover_url" />
@@ -57,7 +57,7 @@
           <router-link :to="{
                  name : 'collection',
                  params : {
-                 c : item.keyword
+                 q : item.keyword
                  }}">
             <el-card :body-style="{ padding: '0px' }">
               <img :src="item.cover_url" />
@@ -108,7 +108,7 @@ export default {
     },
     currentPageNo: {
       get() {
-        return this.$store.state.collections.pageNo
+        return this.$store.state.collections.currentPageNo
       },
       set(val) {
       }
@@ -117,11 +117,13 @@ export default {
   methods: {
     // 换页
     changePage(pageNo) {
-      this.$store.dispatch('getCollectionsInfo', { pageNo: pageNo })
+      this.$store.commit('setCollectionPageNo', pageNo)
+      this.$store.dispatch('getCollectionsInfo')
     }
   },
   created() {
-    this.$store.dispatch('getCollectionsInfo', { pageNo: this.currentPageNo })
+    this.$store.commit('setCollectionPageNo', 1)
+    this.$store.dispatch('getCollectionsInfo')
   }
 }
 </script>

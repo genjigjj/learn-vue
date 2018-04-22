@@ -34,30 +34,31 @@ export default new Router({
     {
       name: 'categories',
       path: '/categories',
-      component: CategoriesView,
-      beforeEnter: (to, from, next) => {
-        store.commit('SET_PAGENO', 1)
-        next()
-      }
+      component: CategoriesView
     },
     {
       name: 'collections',
       path: '/collections',
-      component: CollectionsView,
-      beforeEnter: (to, from, next) => {
-        store.commit('SET_PAGENO', 1)
-        next()
-      }
+      component: CollectionsView
     },
     {
       name: 'category',
       path: '/category/:c',
-      component: MainView
+      component: MainView,
+      beforeEnter: (to, from, next) => {
+        store.commit('setCategory', to.params.c)
+        next()
+      }
     },
     {
       name: 'collection',
-      path: '/collection/:c',
-      component: MainView
+      path: '/collection/:q',
+      component: MainView,
+      beforeEnter: (to, from, next) => {
+        store.commit('setPageNo', 1)
+        store.commit('setQueryValue', to.params.q)
+        next()
+      }
     }
   ]
 })

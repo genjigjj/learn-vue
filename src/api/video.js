@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 // 获取全部视频
-export function getVideos(params) {
+export function getVideos(params, pageNo) {
   const queryParams = {}
-  queryParams.limit = 12
+  queryParams.limit = params.limit
   if (params.c !== undefined && params.c !== '') {
     queryParams.c = params.c
   }
@@ -15,19 +15,16 @@ export function getVideos(params) {
   }
   return axios({
     params: queryParams,
-    url: 'https://api.avgle.com/v1/videos/' + (params.pageNo - 1),
+    url: 'https://api.avgle.com/v1/videos/' + (pageNo - 1),
     method: 'get'
   })
 }
 
 // 查询视频
-export function searchVideo(params) {
-  if (params.queryValue !== undefined && params.queryValue !== '') {
+export function searchVideo(params, queryValue, currentPageNo) {
+  if (queryValue !== undefined && queryValue !== '') {
     const queryParams = {}
-    queryParams.limit = 12
-    if (params.c !== undefined && params.c !== '') {
-      queryParams.c = params.c
-    }
+    queryParams.limit = params.limit
     if (params.t !== undefined && params.t !== '') {
       queryParams.t = params.t
     }
@@ -36,7 +33,7 @@ export function searchVideo(params) {
     }
     return axios({
       params: queryParams,
-      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(params.queryValue) + '/' + (params.pageNo - 1),
+      url: 'https://api.avgle.com/v1/search/' + encodeURIComponent(queryValue) + '/' + (currentPageNo - 1),
       method: 'get'
     })
   } else {
@@ -46,9 +43,9 @@ export function searchVideo(params) {
 }
 
 // 通过id获取视频信息
-export function getFavorites(params) {
+export function getFavorites(vidList) {
   const axiosList = []
-  for (const item of params.vidList) {
+  for (const item of vidList) {
     const tempAxios = axios.get('https://api.avgle.com/v1/video/' + item)
     axiosList.push(tempAxios)
   }

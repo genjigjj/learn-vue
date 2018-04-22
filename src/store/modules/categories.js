@@ -13,8 +13,8 @@ const getters = {
   }
 }
 const mutations = {
-  SET_CATEGORIES_STATE(state, data) {
-    state.categories = data
+  setCategories(state, categories) {
+    state.categories = categories
   }
 }
 const actions = {
@@ -23,7 +23,7 @@ const actions = {
       .then((res) => {
         const respon = res.data
         if (respon.success) {
-          commit('SET_CATEGORIES_STATE', respon.response.categories)
+          commit('setCategories', respon.response.categories)
         }
       })
       .catch(error => {

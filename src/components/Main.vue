@@ -172,9 +172,7 @@ export default {
         {
           value: 'lg',
           label: 'Longest'
-        }],
-      order: '',
-      time: ''
+        }]
     }
   },
   computed: {
@@ -190,9 +188,25 @@ export default {
     },
     currentPageNo: {
       get() {
-        return this.$store.state.videos.pageNo
+        return this.$store.state.videos.currentPageNo
       },
       set(val) {
+      }
+    },
+    order: {
+      get() {
+        return this.$store.state.videos.queryParams.o
+      },
+      set(val) {
+        this.$store.commit('setOrder', val)
+      }
+    },
+    time: {
+      get() {
+        return this.$store.state.videos.queryParams.t
+      },
+      set(val) {
+        this.$store.commit('setTime', val)
       }
     },
     labelName() {
@@ -240,21 +254,18 @@ export default {
     },
     // 换页
     changePage(pageNo) {
+      this.$store.commit('setPageNo', pageNo)
       switch (this.$route.name) {
         case 'main':
-          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, t: this.time, o: this.order })
-          break
         case 'category':
-          this.$store.dispatch('getVideoInfo', { pageNo: pageNo, c: this.$route.params.c, t: this.time, o: this.order })
+          this.$store.dispatch('getVideoInfo')
           break
         case 'favorites':
-          this.$store.dispatch('getFavoriteVideoList', { pageNo: pageNo })
+          this.$store.dispatch('getFavoriteVideoList')
           break
         case 'search':
-          this.$store.dispatch('searchVideoInfo', { pageNo: pageNo, queryValue: this.queryValue, t: this.time, o: this.order })
-          break
         case 'collection':
-          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: pageNo, t: this.time, o: this.order })
+          this.$store.dispatch('searchVideoInfo')
           break
       }
     },
@@ -264,23 +275,32 @@ export default {
       return CryptoJS.enc.Base64.stringify(wordArray)
     },
     select() {
-      const queryParams = {
-        t: this.time,
-        o: this.order
-      }
-      this.$store.commit('SET_QUERYPARAMS', queryParams)
+      this.$store.commit('setPageNo', 1)
       switch (this.$route.name) {
         case 'main':
-          this.$store.dispatch('getVideoInfo', { pageNo: 1, t: this.time, o: this.order })
-          break
         case 'category':
-          this.$store.dispatch('getVideoInfo', { pageNo: 1, c: this.$route.params.c, t: this.time, o: this.order })
+          this.$store.dispatch('getVideoInfo')
           break
         case 'search':
-          this.$store.dispatch('searchVideoInfo', { pageNo: 1, queryValue: this.queryValue, t: this.time, o: this.order })
-          break
         case 'collection':
-          this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: 1, t: this.time, o: this.order })
+          this.$store.dispatch('searchVideoInfo')
+          break
+      }
+    }
+  },
+  watch: {
+    '$route'(to, from) {
+      this.$store.commit('setPageNo', 1)
+      switch (to.name) {
+        case 'main':
+          this.$store.commit('setCategory', '')
+          this.$store.dispatch('getVideoInfo')
+          break
+        case 'favorites':
+          this.$store.dispatch('getFavoriteVideoList')
+          break
+        case 'search':
+          this.$store.dispatch('searchVideoInfo')
           break
       }
     }
@@ -288,19 +308,15 @@ export default {
   created() {
     switch (this.$route.name) {
       case 'main':
-        this.$store.dispatch('getVideoInfo', { pageNo: this.currentPageNo })
-        break
       case 'category':
-        this.$store.dispatch('getVideoInfo', { pageNo: this.currentPageNo, c: this.$route.params.c })
+        this.$store.dispatch('getVideoInfo')
         break
       case 'favorites':
-        this.$store.dispatch('getFavoriteVideoList', { pageNo: this.currentPageNo })
+        this.$store.dispatch('getFavoriteVideoList')
         break
       case 'search':
-        this.$store.dispatch('searchVideoInfo', { pageNo: this.currentPageNo, queryValue: this.queryValue })
-        break
       case 'collection':
-        this.$store.dispatch('searchVideoInfo', { queryValue: this.$route.params.c, pageNo: this.currentPageNo })
+        this.$store.dispatch('searchVideoInfo')
         break
     }
   }

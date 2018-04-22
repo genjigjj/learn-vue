@@ -2,9 +2,14 @@ import { searchVideo, getFavorites, getVideos } from '@/api/video'
 import Store from 'store'
 
 const state = {
+  currentPageNo: 1,
   queryValue: '',
-  pageNo: 1,
-  queryParams: {},
+  queryParams: {
+    limit: 12, // 每页条数
+    t: '', // 时间
+    o: '', // 排序
+    c: '' // 分类
+  },
   videosList: [],
   totalVideos: 0,
   vidList: []
@@ -20,45 +25,43 @@ const getters = {
   }
 }
 const mutations = {
-  SET_SEARCH_STATE(state, data) {
-    state.queryValue = data.queryValue
-    state.pageNo = data.pageNo
-    state.videosList = data.videosList
-    state.totalVideos = data.totalVideos
+  setPageNo(state, pageNo) {
+    state.currentPageNo = pageNo
   },
-  SET_VIDEO_STATE(state, data) {
-    state.pageNo = data.pageNo
-    state.videosList = data.videosList
-    state.totalVideos = data.totalVideos
-  },
-  SET_VIDEOS_LIST(state, data) {
-    state.pageNo = data.pageNo
-    state.videosList = data.videosList
-    state.totalVideos = data.totalVideos
-    state.vidList = data.vidList
-  },
-  SET_PAGENO(state, pageNo) {
-    state.pageNo = pageNo
-  },
-  SET_QUERYVALUE(state, queryValue) {
+  setQueryValue(state, queryValue) {
     state.queryValue = queryValue
   },
-  SET_QUERYPARAMS(state, queryParams) {
+  setQueryParams(state, queryParams) {
     state.queryParams = queryParams
+  },
+  setTime(state, time) {
+    state.queryParams.t = time
+  },
+  setOrder(state, order) {
+    state.queryParams.o = order
+  },
+  setCategory(state, category) {
+    state.queryParams.c = category
+  },
+  setVideosList(state, videosList) {
+    state.videosList = videosList
+  },
+  setTotalVideos(state, totalVideos) {
+    state.totalVideos = totalVideos
+  },
+  setVidList(state, vidList) {
+    state.vidList = vidList
   }
 }
 const actions = {
   // 获取全部视频信息
-  getVideoInfo({ commit }, params) {
-    getVideos(params)
+  getVideoInfo({ commit }) {
+    getVideos(state.queryParams, state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
-          const data = {}
-          data.pageNo = params.pageNo
-          data.videosList = respon.response.videos
-          data.totalVideos = respon.response.total_videos
-          commit('SET_VIDEO_STATE', data)
+          commit('setVideosList', respon.response.videos)
+          commit('setTotalVideos', respon.response.total_videos)
         }
       })
       .catch((err) => {
@@ -66,17 +69,13 @@ const actions = {
       })
   },
   // 查询视频信息
-  searchVideoInfo({ commit }, params) {
-    searchVideo(params)
+  searchVideoInfo({ commit }) {
+    searchVideo(state.queryParams, state.queryValue, state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
-          const data = {}
-          data.pageNo = params.pageNo
-          data.queryValue = params.queryValue
-          data.videosList = respon.response.videos
-          data.totalVideos = respon.response.total_videos
-          commit('SET_SEARCH_STATE', data)
+          commit('setVideosList', respon.response.videos)
+          commit('setTotalVideos', respon.response.total_videos)
         }
       })
       .catch((err) => {
@@ -84,25 +83,20 @@ const actions = {
       })
   },
   // 获取收藏的视频列表
-  getFavoriteVideoList({ commit }, params) {
-    const vidList = Store.get('videoList')
-    if (vidList !== undefined && vidList.length > 0) {
-      params.vidList = vidList.slice((params.pageNo - 1) * 12, params.pageNo * 12)
-      getFavorites(params)
+  getFavoriteVideoList({ commit }) {
+    const allVidList = Store.get('videoList')
+    if (allVidList !== undefined && allVidList.length > 0) {
+      const vidList = allVidList.slice((state.currentPageNo - 1) * 12, state.currentPageNo * 12)
+      getFavorites(vidList)
         .then(
           resultArray => {
-            const data = {
-              videosList: [],
-              totalVideos: 0,
-              vidList: []
-            }
-            data.pageNo = params.pageNo
+            const tempVideosList = []
             for (const result of resultArray) {
-              data.videosList.push(result.data.response.video)
+              tempVideosList.push(result.data.response.video)
             }
-            data.vidList = vidList
-            data.totalVideos = vidList.length
-            commit('SET_VIDEOS_LIST', data)
+            // commit('setVidList', vidList)
+            commit('setTotalVideos', allVidList.length)
+            commit('setVideosList', tempVideosList)
           }
         ).catch((err) => {
           console.log(err)

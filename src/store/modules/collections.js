@@ -1,7 +1,7 @@
 import { getCollections } from '@/api/video'
 
 const state = {
-  pageNo: 1,
+  currentPageNo: 1,
   collections: [],
   totalCollections: 0
 }
@@ -15,23 +15,24 @@ const getters = {
   }
 }
 const mutations = {
-  SET_COLLECTIONS_STATE(state, data) {
-    state.pageNo = data.pageNo
-    state.collections = data.collections
-    state.totalCollections = data.totalCollections
+  setCollectionPageNo(state, pageNo) {
+    state.currentPageNo = pageNo
+  },
+  setCollections(state, collections) {
+    state.collections = collections
+  },
+  setTotalCollections(state, totalCollections) {
+    state.totalCollections = totalCollections
   }
 }
 const actions = {
-  getCollectionsInfo({ commit }, params) {
-    const data = {}
-    data.pageNo = params.pageNo
-    getCollections(params.pageNo)
+  getCollectionsInfo({ commit }) {
+    getCollections(state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
-          data.totalCollections = respon.response.total_collections
-          data.collections = respon.response.collections
-          commit('SET_COLLECTIONS_STATE', data)
+          commit('setTotalCollections', respon.response.total_collections)
+          commit('setCollections', respon.response.collections)
         }
       })
       .catch(error => {
