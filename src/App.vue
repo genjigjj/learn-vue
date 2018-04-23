@@ -11,10 +11,10 @@
           <el-col :span="10">
             <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
                  active-text-color="#ffd04b" mode="horizontal" :router="true">
-              <el-menu-item :index="'/favorites'" @click.native="handleSelect(4)">Favorites</el-menu-item>
-              <el-menu-item :index="'/categories'" @click.native="handleSelect(3)">Categories</el-menu-item>
-              <el-menu-item :index="'/collections'" @click.native="handleSelect(2)">Collections</el-menu-item>
               <el-menu-item index="/" @click.native="handleSelect(1)">Videos</el-menu-item>
+              <el-menu-item :index="'/collections'" @click.native="handleSelect(2)">Collections</el-menu-item>
+              <el-menu-item :index="'/categories'" @click.native="handleSelect(3)">Categories</el-menu-item>
+              <el-menu-item :index="'/favorites'" @click.native="handleSelect(4)">Favorites</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="6">
@@ -88,7 +88,7 @@ export default {
   }
 
   .el-menu-item {
-    float: right;
+    float: left;
   }
 
   .el-menu--horizontal {
