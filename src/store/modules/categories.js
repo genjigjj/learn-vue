@@ -1,4 +1,6 @@
 import { getCategories } from '@/api/video'
+import NProgress from 'nprogress' // Progress 进度条
+import 'nprogress/nprogress.css'// Progress 进度条样式
 
 const state = {
   categories: []
@@ -19,11 +21,13 @@ const mutations = {
 }
 const actions = {
   getCategoriesInfo({ commit }) {
+    NProgress.start()
     getCategories()
       .then((res) => {
         const respon = res.data
         if (respon.success) {
           commit('setCategories', respon.response.categories)
+          NProgress.done()
         }
       })
       .catch(error => {

@@ -1,4 +1,6 @@
 import { getCollections } from '@/api/video'
+import NProgress from 'nprogress' // Progress 进度条
+import 'nprogress/nprogress.css'// Progress 进度条样式
 
 const state = {
   currentPageNo: 1,
@@ -27,12 +29,14 @@ const mutations = {
 }
 const actions = {
   getCollectionsInfo({ commit }) {
+    NProgress.start()
     getCollections(state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
           commit('setTotalCollections', respon.response.total_collections)
           commit('setCollections', respon.response.collections)
+          NProgress.done()
         }
       })
       .catch(error => {

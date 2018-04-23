@@ -290,6 +290,7 @@ export default {
   },
   watch: {
     '$route'(to, from) {
+      this.$store.commit('setLock', true)
       this.$store.commit('setPageNo', 1)
       switch (to.name) {
         case 'main':
@@ -299,13 +300,11 @@ export default {
         case 'favorites':
           this.$store.dispatch('getFavoriteVideoList')
           break
-        case 'search':
-          this.$store.dispatch('searchVideoInfo')
-          break
       }
     }
   },
   created() {
+    this.$store.commit('setLock', true)
     switch (this.$route.name) {
       case 'main':
       case 'category':

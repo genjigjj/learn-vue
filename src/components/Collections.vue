@@ -123,6 +123,7 @@ export default {
   },
   created() {
     this.$store.commit('setCollectionPageNo', 1)
+    this.$store.commit('setLock', true)
     this.$store.dispatch('getCollectionsInfo')
   }
 }

@@ -1,7 +1,10 @@
 import { searchVideo, getFavorites, getVideos } from '@/api/video'
 import Store from 'store'
+import NProgress from 'nprogress' // Progress 进度条
+import 'nprogress/nprogress.css'// Progress 进度条样式
 
 const state = {
+  lock: false,
   currentPageNo: 1,
   queryValue: '',
   queryParams: {
@@ -25,6 +28,9 @@ const getters = {
   }
 }
 const mutations = {
+  setLock(state, lock) {
+    state.lock = lock
+  },
   setPageNo(state, pageNo) {
     state.currentPageNo = pageNo
   },
@@ -56,12 +62,14 @@ const mutations = {
 const actions = {
   // 获取全部视频信息
   getVideoInfo({ commit }) {
+    NProgress.start()
     getVideos(state.queryParams, state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
           commit('setVideosList', respon.response.videos)
           commit('setTotalVideos', respon.response.total_videos)
+          NProgress.done()
         }
       })
       .catch((err) => {
@@ -70,12 +78,14 @@ const actions = {
   },
   // 查询视频信息
   searchVideoInfo({ commit }) {
+    NProgress.start()
     searchVideo(state.queryParams, state.queryValue, state.currentPageNo)
       .then((res) => {
         const respon = res.data
         if (respon.success) {
           commit('setVideosList', respon.response.videos)
           commit('setTotalVideos', respon.response.total_videos)
+          NProgress.done()
         }
       })
       .catch((err) => {
@@ -84,6 +94,7 @@ const actions = {
   },
   // 获取收藏的视频列表
   getFavoriteVideoList({ commit }) {
+    NProgress.start()
     const allVidList = Store.get('videoList')
     if (allVidList !== undefined && allVidList.length > 0) {
       const vidList = allVidList.slice((state.currentPageNo - 1) * 12, state.currentPageNo * 12)
@@ -97,6 +108,7 @@ const actions = {
             // commit('setVidList', vidList)
             commit('setTotalVideos', allVidList.length)
             commit('setVideosList', tempVideosList)
+            NProgress.done()
           }
         ).catch((err) => {
           console.log(err)

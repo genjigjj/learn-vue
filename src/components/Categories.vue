@@ -166,6 +166,7 @@ export default {
     })
   },
   created() {
+    this.$store.commit('setLock', true)
     this.$store.dispatch('getCategoriesInfo')
   }
 }

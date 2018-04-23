@@ -8,7 +8,7 @@ import CollectionsView from '../components/Collections'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -62,3 +62,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  store.commit('setLock', false)
+  next()
+})
+
+export default router

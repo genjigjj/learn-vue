@@ -10,11 +10,11 @@
           </el-col>
           <el-col :span="10">
             <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
-               active-text-color="#ffd04b" mode="horizontal" :router="true">
-              <el-menu-item :index="'/favorites'">Favorites</el-menu-item>
-              <el-menu-item :index="'/categories'">Categories</el-menu-item>
-              <el-menu-item :index="'/collections'">Collections</el-menu-item>
-              <el-menu-item index="/">Videos</el-menu-item>
+                 active-text-color="#ffd04b" mode="horizontal" :router="true">
+              <el-menu-item :index="'/favorites'" @click.native="handleSelect(4)">Favorites</el-menu-item>
+              <el-menu-item :index="'/categories'" @click.native="handleSelect(3)">Categories</el-menu-item>
+              <el-menu-item :index="'/collections'" @click.native="handleSelect(2)">Collections</el-menu-item>
+              <el-menu-item index="/" @click.native="handleSelect(1)">Videos</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="6">
@@ -46,7 +46,28 @@ export default {
         this.$store.dispatch('searchVideoInfo')
         this.$router.push({ name: 'search' })
       }
+    },
+    handleSelect(no) {
+      if (this.$store.state.videos.lock) {
+        switch (no) {
+          case 1:
+            this.$store.dispatch('getVideoInfo')
+            break
+          case 2:
+            this.$store.dispatch('getCollectionsInfo')
+            break
+          case 3:
+            this.$store.dispatch('getCategoriesInfo')
+            break
+          case 4:
+            this.$store.dispatch('getFavoriteVideoList')
+            break
+        }
+      }
     }
+  },
+  created() {
+    this.$store.commit('setLock', true)
   }
 }
 </script>
