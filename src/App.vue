@@ -42,6 +42,7 @@ export default {
   methods: {
     searchVideo() {
       if (this.inputValue !== '') {
+        this.$store.commit('setPageNo', 1)
         this.$store.commit('setQueryValue', this.inputValue)
         this.$store.dispatch('searchVideoInfo')
         this.$router.push({ name: 'search' })
@@ -51,15 +52,18 @@ export default {
       if (this.$store.state.videos.lock) {
         switch (no) {
           case 1:
+            this.$store.commit('setPageNo', 1)
             this.$store.dispatch('getVideoInfo')
             break
           case 2:
+            this.$store.commit('setCollectionPageNo', 1)
             this.$store.dispatch('getCollectionsInfo')
             break
           case 3:
             this.$store.dispatch('getCategoriesInfo')
             break
           case 4:
+            this.$store.commit('setPageNo', 1)
             this.$store.dispatch('getFavoriteVideoList')
             break
         }
