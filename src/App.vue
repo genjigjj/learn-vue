@@ -3,12 +3,12 @@
     <el-container>
       <el-header height="'65px'">
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :lg="8" :xs="24" >
             <div class="logo">
               <img alt="logo" src="/static/logo.webp">
             </div>
           </el-col>
-          <el-col :span="10">
+          <el-col :lg="10" :xs="24" >
             <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
                  active-text-color="#ffd04b" mode="horizontal" :router="true">
               <el-menu-item index="/" @click.native="handleSelect(1)">Videos</el-menu-item>
@@ -17,7 +17,7 @@
               <el-menu-item :index="'/favorites'" @click.native="handleSelect(4)">Favorites</el-menu-item>
             </el-menu>
           </el-col>
-          <el-col :span="6">
+          <el-col :lg="6" :xs="24" >
             <div class="search-input">
               <el-input v-model="inputValue" @keyup.native.enter="searchVideo" placeholder="请输入搜索内容" class="input-with-search">
                 <el-button @click.native="searchVideo" slot="append" icon="el-icon-search"></el-button>
@@ -89,10 +89,6 @@ export default {
   .el-header {
     border: 1px solid #eee;
     background-color: #323232;
-  }
-
-  .el-menu-item {
-    float: left;
   }
 
   .el-menu--horizontal {

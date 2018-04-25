@@ -4,7 +4,7 @@
       <el-row :gutter="20" v-if="$route.name !== 'favorites'">
         <el-form>
           <el-form-item :label="labelName">
-            <el-col :span="4">
+            <el-col :lg="4" :xs="9">
               <el-select v-model="time" placeholder="TimeLine" @change="select">
                 <el-option
                   v-for="item in optionsA"
@@ -14,7 +14,7 @@
                 </el-option>
               </el-select>
             </el-col>
-            <el-col :span="4">
+            <el-col :lg="4" :xs="9">
               <el-select v-model="order" placeholder="OrderBy" @change="select">
                 <el-option
                   v-for="item in optionsB"
@@ -28,7 +28,7 @@
         </el-form>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[0]" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -54,7 +54,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
+        <el-col :lg="6" :xs="24"  v-for="item in sliceList[1]" :key="item.id">
           <router-link :to="{
                  name : 'video',
                   query : {
@@ -80,7 +80,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
+        <el-col :lg="6" :xs="24"  v-for="item in sliceList[2]" :key="item.id">
           <router-link :to="{
                  name : 'video',
                  query : {
@@ -324,11 +324,12 @@ export default {
 
 <style scoped>
   .el-main .el-row {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .el-col {
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 
   .el-form{

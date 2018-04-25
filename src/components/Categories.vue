@@ -2,7 +2,7 @@
   <div id="categories">
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[0]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[0]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -27,7 +27,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[1]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[1]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -52,7 +52,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[2]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[2]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -77,7 +77,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[3]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[3]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -102,7 +102,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[4]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[4]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -127,7 +127,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in sliceList[5]" :key="item.id">
+        <el-col :lg="6" :xs="24" v-for="item in sliceList[5]" :key="item.id">
           <router-link :to="{
                  name : 'category',
                  params : {
@@ -174,11 +174,12 @@ export default {
 
 <style scoped>
   .el-main .el-row {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .el-col {
     border-radius: 4px;
+    margin-bottom: 10px;
   }
 
   img{
