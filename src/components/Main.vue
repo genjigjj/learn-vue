@@ -107,7 +107,16 @@
       </el-row>
     </el-main>
     <el-footer>
-      <el-pagination
+      <el-pagination class="hidden-sm-and-down"
+        background
+        layout="prev, pager, next"
+        :page-size="12"
+        :page-count="getPageCount"
+        :currentPage.sync="currentPageNo"
+        @current-change="changePage">
+      </el-pagination>
+      <el-pagination class="hidden-md-and-up"
+        small
         background
         layout="prev, pager, next"
         :page-size="12"

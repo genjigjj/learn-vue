@@ -7,6 +7,7 @@ import router from './router/index'
 import 'animate.css/animate.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/display.css'
 import moment from 'moment'
 
 Vue.use(ElementUI)
