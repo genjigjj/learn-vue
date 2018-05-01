@@ -1,7 +1,9 @@
 import { searchVideo, getFavorites, getVideos } from '@/api/video'
 import Store from 'store'
 import NProgress from 'nprogress' // Progress 进度条
-import 'nprogress/nprogress.css'// Progress 进度条样式
+import 'nprogress/nprogress.css'
+import { getRelatedVideoInfo } from '../../api/video'
+// Progress 进度条样式
 
 const state = {
   lock: false,
@@ -14,6 +16,7 @@ const state = {
     c: '' // 分类
   },
   videosList: [],
+  relatedVideoList: [],
   totalVideos: 0,
   vidList: []
 }
@@ -23,6 +26,15 @@ const getters = {
     const sliceList = []
     for (let i = 0; i < 3; i++) {
       sliceList.push(state.videosList.slice(i * 4, (i + 1) * 4))
+    }
+    return sliceList
+  },
+
+  // 返回两个数组
+  relatedVideoGetter(state) {
+    const sliceList = []
+    for (let i = 0; i < 2; i++) {
+      sliceList.push(state.relatedVideoList.slice(i * 4, (i + 1) * 4))
     }
     return sliceList
   }
@@ -57,6 +69,9 @@ const mutations = {
   },
   setVidList(state, vidList) {
     state.vidList = vidList
+  },
+  setRelatedList(state, relatedVideoList) {
+    state.relatedVideoList = relatedVideoList
   }
 }
 const actions = {
@@ -114,6 +129,21 @@ const actions = {
           console.log(err)
         })
     }
+  },
+  // 获取相关视频
+  getRelatedVideoList({ commit }, queryValue) {
+    NProgress.start()
+    getRelatedVideoInfo(queryValue)
+      .then(res => {
+        const tempVideosList = []
+        if (res.data.status === 1) {
+          for (const result of res.data.videosList) {
+            tempVideosList.push(result.response.video)
+          }
+        }
+        commit('setRelatedList', tempVideosList)
+        NProgress.done()
+      })
   }
 }
 

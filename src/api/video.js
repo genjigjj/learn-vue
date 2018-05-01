@@ -68,3 +68,15 @@ export function getCollections(pageNo) {
   })
 }
 
+// 获取相关视频列表
+export function getRelatedVideoInfo(queryValue) {
+  return axios({
+    params: {
+      page: queryValue.page,
+      vid: queryValue.vid
+    },
+    url: 'http://127.0.0.1:3000/api/vids',
+    method: 'get'
+  })
+}
+
