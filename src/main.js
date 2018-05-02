@@ -10,10 +10,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import moment from 'moment'
 
+moment.locale('zh-cn')
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-Vue.prototype.$moment = moment
-moment.locale('zh-cn')
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

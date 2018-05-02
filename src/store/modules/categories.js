@@ -8,7 +8,7 @@ const state = {
 const getters = {
   categoriesGetter(state) {
     const sliceList = []
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < state.categories.length / 4; i++) {
       sliceList.push(state.categories.slice(i * 4, (i + 1) * 4))
     }
     return sliceList

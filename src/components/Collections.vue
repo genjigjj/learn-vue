@@ -1,8 +1,8 @@
 <template>
   <div id="collections">
     <el-main>
-      <el-row :gutter="20">
-        <el-col :lg="6" :xs="24" v-for="item in sliceList[0]" :key="item.id">
+      <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
+        <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
           <router-link :to="{
                  name : 'collection',
                  params : {
@@ -27,7 +27,7 @@
           </router-link>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <!--<el-row :gutter="20">
         <el-col :lg="6" :xs="24" v-for="item in sliceList[1]" :key="item.id">
           <router-link :to="{
                  name : 'collection',
@@ -76,7 +76,7 @@
             </el-card>
           </router-link>
         </el-col>
-      </el-row>
+      </el-row>-->
     </el-main>
     <el-footer>
       <el-pagination class="hidden-sm-and-down"

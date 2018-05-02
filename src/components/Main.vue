@@ -27,8 +27,8 @@
           </el-form-item>
         </el-form>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :lg="6" :xs="24" v-for="item in sliceList[0]" :key="item.id">
+      <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
+        <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
           <router-link :to="{
                   name : 'video',
                   query : {
@@ -37,58 +37,6 @@
                  }}">
             <el-card :body-style="{ padding: '0px' }">
               <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                     @mouseover="playPreVideo($event)"
-                     @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;" :title="item.title" >
-                <span>{{item.title}}</span>
-                <div class="bottom clearfix">
-                  <time class="time">{{countAddTime(item)}}</time>
-                </div>
-                <div class="bottom clearfix">
-                  <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
-                  <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
-                </div>
-              </div>
-            </el-card>
-          </router-link>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :lg="6" :xs="24"  v-for="item in sliceList[1]" :key="item.id">
-          <router-link :to="{
-                 name : 'video',
-                  query : {
-                  q : encodeUrl(item.embedded_url),
-                  v : item.vid
-                 }}">
-            <el-card :body-style="{ padding: '0px' }">
-              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                     @mouseover="playPreVideo($event)"
-                     @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;" :title="item.title" >
-                <span>{{item.title}}</span>
-                <div class="bottom clearfix">
-                  <time class="time">{{countAddTime(item)}}</time>
-                </div>
-                <div class="bottom clearfix">
-                  <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
-                  <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
-                </div>
-              </div>
-            </el-card>
-          </router-link>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :lg="6" :xs="24"  v-for="item in sliceList[2]" :key="item.id">
-          <router-link :to="{
-                 name : 'video',
-                 query : {
-                 q : encodeUrl(item.embedded_url),
-                 v : item.vid
-                 }}">
-            <el-card :body-style="{ padding: '0px' }">
-              <video preload="none"  loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
               <div style="padding: 14px;" :title="item.title" >
@@ -130,6 +78,7 @@
 
 <script>
 import CryptoJS from 'crypto-js'
+import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -234,7 +183,7 @@ export default {
   methods: {
     // 计算发布时间差
     countAddTime(item) {
-      return this.$moment(item.addtime, 'X').fromNow()
+      return moment(item.addtime, 'X').fromNow()
     },
     // 计算喜欢该视频人数所占百分比
     countLikeRate(item) {

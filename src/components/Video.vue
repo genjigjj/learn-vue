@@ -9,36 +9,12 @@
         </el-card>
         <el-row>
           <el-col>
-            <el-button type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
-            <el-button :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
+            <el-button class="button" type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
+            <el-button class="button" :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
-          <el-col :lg="6" :xs="24" v-for="item in sliceList[0]" :key="item.id">
-            <router-link :to="{
-                  name : 'video',
-                  query : {
-                  q : encodeUrl(item.embedded_url),
-                  v : item.vid
-                 }}">
-              <el-card :body-style="{ padding: '0px' }">
-                <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                       @mouseover="playPreVideo($event)"
-                       @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-                <div style="padding: 14px;" :title="item.title" >
-                  <span>{{item.title}}</span>
-                  <div class="bottom clearfix">
-                    <time class="time">{{countAddTime(item)}}</time>
-                  </div>
-                  <div class="bottom clearfix">
-                    <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
-                    <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
-                  </div>
-                </div>
-              </el-card>
-            </router-link>
-          </el-col>
-          <el-col :lg="6" :xs="24" v-for="item in sliceList[1]" :key="item.id">
+        <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
+          <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
             <router-link :to="{
                   name : 'video',
                   query : {
@@ -63,12 +39,16 @@
             </router-link>
           </el-col>
         </el-row>
+        <div class="show">
+          <el-button type="primary" round @click="showMore">更多</el-button>
+        </div>
       </el-main>
   </div>
 </template>
 
 <script>
 import CryptoJS from 'crypto-js'
+import moment from 'moment'
 import Store from 'store'
 import { mapGetters } from 'vuex'
 
@@ -78,7 +58,8 @@ export default {
     return {
       videoUrl: '',
       vid: '',
-      type: ''
+      type: '',
+      pageNo: 1
     }
   },
   computed: {
@@ -128,7 +109,7 @@ export default {
     },
     // 计算发布时间差
     countAddTime(item) {
-      return this.$moment(item.addtime, 'X').fromNow()
+      return moment(item.addtime, 'X').fromNow()
     },
     // 计算喜欢该视频人数所占百分比
     countLikeRate(item) {
@@ -159,6 +140,8 @@ export default {
       this.$router.back()
     },
     fetchData() {
+      this.pageNo = 1
+      this.$store.commit('clearRelatedVideoList')
       this.videoUrl = this.$route.query.q
       this.vid = this.$route.query.v
       const videoList = Store.get('videoList')
@@ -170,6 +153,12 @@ export default {
       this.$store.dispatch('getRelatedVideoList', {
         page: 1,
         vid: this.$route.query.v
+      })
+    },
+    showMore() {
+      this.$store.dispatch('getRelatedVideoList', {
+        page: ++this.pageNo,
+        vid: this.vid
       })
     }
   },
@@ -186,7 +175,7 @@ export default {
     overflow: hidden;
   }
 
-  .el-button {
+  .button {
     float: right;
     margin: 10px;
   }
@@ -261,5 +250,9 @@ export default {
 
   .el-icon-view {
     margin-left: 4px;
+  }
+
+  .show{
+    text-align: center;
   }
 </style>

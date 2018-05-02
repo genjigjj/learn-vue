@@ -10,7 +10,7 @@ const state = {
 const getters = {
   collectionsGetter(state) {
     const sliceList = []
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < state.collections.length / 4; i++) {
       sliceList.push(state.collections.slice(i * 4, (i + 1) * 4))
     }
     return sliceList

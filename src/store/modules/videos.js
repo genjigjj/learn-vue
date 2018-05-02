@@ -24,7 +24,7 @@ const getters = {
   // 返回三个数组
   videosGetter(state) {
     const sliceList = []
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < state.videosList.length / 4; i++) {
       sliceList.push(state.videosList.slice(i * 4, (i + 1) * 4))
     }
     return sliceList
@@ -33,7 +33,7 @@ const getters = {
   // 返回两个数组
   relatedVideoGetter(state) {
     const sliceList = []
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < state.relatedVideoList.length / 4; i++) {
       sliceList.push(state.relatedVideoList.slice(i * 4, (i + 1) * 4))
     }
     return sliceList
@@ -71,7 +71,10 @@ const mutations = {
     state.vidList = vidList
   },
   setRelatedList(state, relatedVideoList) {
-    state.relatedVideoList = relatedVideoList
+    state.relatedVideoList = [...state.relatedVideoList, ...relatedVideoList]
+  },
+  clearRelatedVideoList(state) {
+    state.relatedVideoList = []
   }
 }
 const actions = {
@@ -140,8 +143,13 @@ const actions = {
           for (const result of res.data.videosList) {
             tempVideosList.push(result.response.video)
           }
+          commit('setRelatedList', tempVideosList)
+        } else {
+          this.$message({
+            message: '没有更多视频了QAQ',
+            type: 'info'
+          })
         }
-        commit('setRelatedList', tempVideosList)
         NProgress.done()
       })
   }
