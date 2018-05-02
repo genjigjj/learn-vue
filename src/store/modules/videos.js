@@ -131,7 +131,10 @@ const actions = {
         ).catch((err) => {
           console.log(err)
         })
+    } else {
+      commit('setVideosList', [])
     }
+    NProgress.done()
   },
   // 获取相关视频
   getRelatedVideoList({ commit }, queryValue) {
