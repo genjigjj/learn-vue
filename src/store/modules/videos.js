@@ -3,6 +3,7 @@ import Store from 'store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'
 import { getRelatedVideoInfo } from '../../api/video'
+import { Message } from 'element-ui'
 // Progress 进度条样式
 
 const state = {
@@ -148,9 +149,9 @@ const actions = {
           }
           commit('setRelatedList', tempVideosList)
         } else {
-          this.$message({
-            message: '没有更多视频了QAQ',
-            type: 'info'
+          Message({
+            message: '暂无相关视频',
+            type: 'warning'
           })
         }
         NProgress.done()
