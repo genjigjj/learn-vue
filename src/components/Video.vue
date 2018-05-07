@@ -40,7 +40,7 @@
           </el-col>
         </el-row>
         <div class="show">
-          <el-button type="primary" round @click="showMore">更多</el-button>
+          <el-button type="primary" round @click="showMore">{{$t('message.more')}}</el-button>
         </div>
       </el-main>
   </div>
@@ -50,7 +50,7 @@
 import CryptoJS from 'crypto-js'
 import moment from 'moment'
 import Store from 'store'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'video',
@@ -59,12 +59,15 @@ export default {
       videoUrl: '',
       vid: '',
       type: '',
-      pageNo: 1
+      pageNo: 0
     }
   },
   computed: {
     ...mapGetters({
       sliceList: 'relatedVideoGetter'
+    }),
+    ...mapState({
+      lang: state => state.videos.lang
     }),
     decodeUrl() {
       const parsedWordArray = CryptoJS.enc.Base64.parse(this.videoUrl)
@@ -73,6 +76,9 @@ export default {
   },
   watch: {
     '$route'(to, from) {
+      this.fetchData()
+    },
+    lang() {
       this.fetchData()
     }
   },
@@ -93,7 +99,7 @@ export default {
         Store.set('videoList', videoList)
         this.type = 'danger'
         this.$message({
-          message: '收藏成功',
+          message: this.$t('message.collectionSuccess'),
           type: 'success'
         })
       } else {
@@ -102,7 +108,7 @@ export default {
         Store.set('videoList', videoList)
         this.type = 'info'
         this.$message({
-          message: '取消收藏成功',
+          message: this.$t('message.removeCollection'),
           type: 'success'
         })
       }
@@ -140,7 +146,7 @@ export default {
       this.$router.back()
     },
     fetchData() {
-      this.pageNo = 1
+      this.pageNo = 0
       this.$store.commit('clearRelatedVideoList')
       this.videoUrl = this.$route.query.q
       this.vid = this.$route.query.v
@@ -151,7 +157,7 @@ export default {
         this.type = 'danger'
       }
       this.$store.dispatch('getRelatedVideoList', {
-        page: 1,
+        page: 0,
         vid: this.$route.query.v
       })
     },

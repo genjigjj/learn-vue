@@ -5,20 +5,16 @@ import store from './store'
 import App from './App'
 import router from './router/index'
 import 'animate.css/animate.css'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import 'element-ui/lib/theme-chalk/display.css'
-import moment from 'moment'
+import i18n from './lang/i18n'
 
-moment.locale('zh-cn')
-Vue.use(ElementUI)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   store,
   router,
   template: '<app/>',
-  components: { App }
+  components: { App },
+  i18n: i18n
 })
 

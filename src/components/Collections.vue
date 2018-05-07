@@ -27,61 +27,11 @@
           </router-link>
         </el-col>
       </el-row>
-      <!--<el-row :gutter="20">
-        <el-col :lg="6" :xs="24" v-for="item in sliceList[1]" :key="item.id">
-          <router-link :to="{
-                 name : 'collection',
-                 params : {
-                 q : item.keyword
-                 }}">
-            <el-card :body-style="{ padding: '0px' }">
-              <img :src="item.cover_url" />
-              <el-row>
-                <el-col :span="16">
-                  <div class="pull-left">
-                    {{item.title}}
-                  </div>
-                </el-col>
-                <el-col :span="8">
-                  <div class="pull-right">
-                    <span class="badge">{{item.video_count}}</span>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </router-link>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :lg="6" :xs="24" v-for="item in sliceList[2]" :key="item.id">
-          <router-link :to="{
-                 name : 'collection',
-                 params : {
-                 q : item.keyword
-                 }}">
-            <el-card :body-style="{ padding: '0px' }">
-              <img :src="item.cover_url" />
-              <el-row>
-                <el-col :span="16">
-                  <div class="pull-left">
-                    {{item.title}}
-                  </div>
-                </el-col>
-                <el-col :span="8">
-                  <div class="pull-right">
-                    <span class="badge">{{item.video_count}}</span>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </router-link>
-        </el-col>
-      </el-row>-->
     </el-main>
     <el-footer>
       <el-pagination class="hidden-sm-and-down"
         background
-        layout="prev, pager, next"
+        layout="prev, pager, next, jumper"
         :page-size="12"
         :page-count="getPageCount"
         :currentPage.sync="currentPageNo"
@@ -89,7 +39,7 @@
       </el-pagination>
       <el-pagination class="hidden-md-and-up"
          small
-         layout="prev, pager, next"
+         layout="prev, pager, next, jumper"
          :page-size="12"
          :page-count="getPageCount"
          :currentPage.sync="currentPageNo"

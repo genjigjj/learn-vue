@@ -4,6 +4,7 @@ import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'
 import { getRelatedVideoInfo } from '../../api/video'
 import { Message } from 'element-ui'
+import Vue from '@/main'
 // Progress 进度条样式
 
 const state = {
@@ -19,7 +20,8 @@ const state = {
   videosList: [],
   relatedVideoList: [],
   totalVideos: 0,
-  vidList: []
+  vidList: [],
+  lang: ''
 }
 const getters = {
   // 返回三个数组
@@ -76,6 +78,9 @@ const mutations = {
   },
   clearRelatedVideoList(state) {
     state.relatedVideoList = []
+  },
+  setLang(state, lang) {
+    state.lang = lang
   }
 }
 const actions = {
@@ -88,11 +93,12 @@ const actions = {
         if (respon.success) {
           commit('setVideosList', respon.response.videos)
           commit('setTotalVideos', respon.response.total_videos)
-          NProgress.done()
         }
+        NProgress.done()
       })
       .catch((err) => {
         console.log(err)
+        NProgress.done()
       })
   },
   // 查询视频信息
@@ -104,11 +110,12 @@ const actions = {
         if (respon.success) {
           commit('setVideosList', respon.response.videos)
           commit('setTotalVideos', respon.response.total_videos)
-          NProgress.done()
         }
+        NProgress.done()
       })
       .catch((err) => {
         console.log(err)
+        NProgress.done()
       })
   },
   // 获取收藏的视频列表
@@ -131,11 +138,13 @@ const actions = {
           }
         ).catch((err) => {
           console.log(err)
+          NProgress.done()
         })
     } else {
       commit('setVideosList', [])
+      commit('setTotalVideos', 0)
+      NProgress.done()
     }
-    NProgress.done()
   },
   // 获取相关视频
   getRelatedVideoList({ commit }, queryValue) {
@@ -150,10 +159,18 @@ const actions = {
           commit('setRelatedList', tempVideosList)
         } else {
           Message({
-            message: '暂无相关视频',
+            message: Vue.$t('message.noMoreVideos'),
             type: 'warning'
           })
         }
+        NProgress.done()
+      })
+      .catch(err => {
+        console.log(err)
+        Message({
+          message: Vue.$t('message.noMoreVideos'),
+          type: 'warning'
+        })
         NProgress.done()
       })
   }

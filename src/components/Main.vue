@@ -5,22 +5,22 @@
         <el-form>
           <el-form-item :label="labelName">
             <el-col :lg="4" :xs="9">
-              <el-select v-model="time" placeholder="TimeLine" @change="select">
+              <el-select v-model="time" :placeholder="$t('message.timeLine')" @change="select">
                 <el-option
-                  v-for="item in optionsA"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="(item, index) in optionsA"
+                  :key="item.id"
+                  :label="getTimeLabel(index)"
+                  :value="item">
                 </el-option>
               </el-select>
             </el-col>
             <el-col :lg="4" :xs="9">
-              <el-select v-model="order" placeholder="OrderBy" @change="select">
+              <el-select v-model="order" :placeholder="$t('message.orderBy')" @change="select">
                 <el-option
-                  v-for="item in optionsB"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  v-for="(item, index) in optionsB"
+                  :key="item.id"
+                  :label="getOrderLabel(index)"
+                  :value="item">
                 </el-option>
               </el-select>
             </el-col>
@@ -39,7 +39,7 @@
               <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                      @mouseover="playPreVideo($event)"
                      @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;" :title="item.title" >
+              <div style="padding: 14px;" :title="item.title">
                 <span>{{item.title}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{countAddTime(item)}}</time>
@@ -56,21 +56,21 @@
     </el-main>
     <el-footer>
       <el-pagination class="hidden-sm-and-down"
-        background
-        layout="prev, pager, next"
-        :page-size="12"
-        :page-count="getPageCount"
-        :currentPage.sync="currentPageNo"
-        @current-change="changePage">
+                     background
+                     layout="prev, pager, next, jumper"
+                     :page-size="12"
+                     :page-count="getPageCount"
+                     :currentPage.sync="currentPageNo"
+                     @current-change="changePage">
       </el-pagination>
       <el-pagination class="hidden-md-and-up"
-        small
-        background
-        layout="prev, pager, next"
-        :page-size="12"
-        :page-count="getPageCount"
-        :currentPage.sync="currentPageNo"
-        @current-change="changePage">
+                     small
+                     background
+                     layout="prev, pager, next, jumper"
+                     :page-size="12"
+                     :page-count="getPageCount"
+                     :currentPage.sync="currentPageNo"
+                     @current-change="changePage">
       </el-pagination>
     </el-footer>
   </div>
@@ -85,58 +85,15 @@ export default {
   name: 'Main',
   data() {
     return {
-      optionsA: [
-        {
-          value: 'a',
-          label: 'All'
-        },
-        {
-          value: 't',
-          label: 'Added Today'
-        },
-        {
-          value: 'w',
-          label: 'Added This Week'
-        },
-        {
-          value: 'm',
-          label: 'Added This Month'
-        }],
-      optionsB: [
-        {
-          value: 'bw',
-          label: 'Being Watched'
-        },
-        {
-          value: 'mr',
-          label: 'Most Recent'
-        },
-        {
-          value: 'mv',
-          label: 'Most View'
-        },
-        {
-          value: 'mc',
-          label: 'Most Commented'
-        },
-        {
-          value: 'tr',
-          label: 'Top Rated'
-        },
-        {
-          value: 'tf',
-          label: 'Top Favorites'
-        },
-        {
-          value: 'lg',
-          label: 'Longest'
-        }]
+      optionsA: ['a', 't', 'w', 'm'],
+      optionsB: ['bw', 'mr', 'mv', 'mc', 'tr', 'tf', 'lg']
     }
   },
   computed: {
     ...mapState({
       queryValue: state => state.videos.queryValue,
-      totalVideos: state => state.videos.totalVideos
+      totalVideos: state => state.videos.totalVideos,
+      lang: state => state.videos.lang
     }),
     ...mapGetters({
       sliceList: 'videosGetter'
@@ -170,13 +127,13 @@ export default {
     labelName() {
       switch (this.$route.name) {
         case 'main':
-          return 'Videos'
+          return this.$t('message.videos')
         case 'collection':
-          return 'Collections'
+          return this.$t('message.collections')
         case 'category':
-          return 'Categories'
+          return this.$t('message.categories')
         case 'search':
-          return 'Search'
+          return this.$t('message.search')
       }
     }
   },
@@ -244,6 +201,30 @@ export default {
           this.$store.dispatch('searchVideoInfo')
           break
       }
+    },
+    fetchData() {
+      this.$store.commit('setLock', true)
+      switch (this.$route.name) {
+        case 'main':
+        case 'category':
+          this.$store.dispatch('getVideoInfo')
+          break
+        case 'favorites':
+          this.$store.dispatch('getFavoriteVideoList')
+          break
+        case 'search':
+        case 'collection':
+          this.$store.dispatch('searchVideoInfo')
+          break
+      }
+    },
+    // 获取时间label
+    getTimeLabel(index) {
+      return this.$t(`message.time[${index}]`)
+    },
+    // 获取排序label
+    getOrderLabel(index) {
+      return this.$t(`message.order[${index}]`)
     }
   },
   watch: {
@@ -259,23 +240,13 @@ export default {
           this.$store.dispatch('getFavoriteVideoList')
           break
       }
+    },
+    lang() {
+      this.fetchData()
     }
   },
   created() {
-    this.$store.commit('setLock', true)
-    switch (this.$route.name) {
-      case 'main':
-      case 'category':
-        this.$store.dispatch('getVideoInfo')
-        break
-      case 'favorites':
-        this.$store.dispatch('getFavoriteVideoList')
-        break
-      case 'search':
-      case 'collection':
-        this.$store.dispatch('searchVideoInfo')
-        break
-    }
+    this.fetchData()
   }
 }
 </script>
@@ -290,7 +261,7 @@ export default {
     margin-bottom: 10px;
   }
 
-  .el-form{
+  .el-form {
     margin-left: 10px;
   }
 
