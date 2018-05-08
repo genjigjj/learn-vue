@@ -46,6 +46,7 @@ const router = new Router({
       path: '/category/:c',
       component: MainView,
       beforeEnter: (to, from, next) => {
+        store.commit('setPageNo', 1)
         store.commit('setCategory', to.params.c)
         next()
       }
