@@ -76,6 +76,7 @@ export default {
         switch (no) {
           case 1:
             this.$store.commit('setPageNo', 1)
+            this.$store.commit('setCategory', '')
             this.$store.dispatch('getVideoInfo')
             break
           case 2:

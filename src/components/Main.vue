@@ -206,6 +206,9 @@ export default {
       this.$store.commit('setLock', true)
       switch (this.$route.name) {
         case 'main':
+          this.$store.commit('setCategory', '')
+          this.$store.dispatch('getVideoInfo')
+          break
         case 'category':
           this.$store.dispatch('getVideoInfo')
           break
