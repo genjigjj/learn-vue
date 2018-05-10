@@ -35,21 +35,23 @@
                   q : encodeUrl(item.embedded_url),
                   v : item.vid
                  }}">
-            <el-card :body-style="{ padding: '0px' }">
-              <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                     @mouseover="playPreVideo($event)"
-                     @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-              <div style="padding: 14px;" :title="item.title">
-                <span>{{item.title}}</span>
-                <div class="bottom clearfix">
-                  <time class="time">{{countAddTime(item)}}</time>
+            <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
+              <el-card :body-style="{ padding: '0px' }">
+                <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+                       @mouseover="playPreVideo($event)"
+                       @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
+                <div style="padding: 14px;">
+                  <span>{{item.title}}</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{countAddTime(item)}}</time>
+                  </div>
+                  <div class="bottom clearfix">
+                    <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
+                    <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
+                  </div>
                 </div>
-                <div class="bottom clearfix">
-                  <div class="view-number">{{item.viewnumber}}<i class="el-icon-view"></i></div>
-                  <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
-                </div>
-              </div>
-            </el-card>
+              </el-card>
+            </el-tooltip>
           </router-link>
         </el-col>
       </el-row>

@@ -1,31 +1,32 @@
 <template>
   <div id="video">
-      <el-main>
-        <el-card>
-          <iframe referrerpolicy="origin" :src="decodeUrl"
-                  :key="vid" sandbox="allow-scripts allow-same-origin"
-                  allowfullscreen frameborder="0">
-          </iframe>
-        </el-card>
-        <el-row>
-          <el-col>
-            <el-button class="button" type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
-            <el-button class="button" :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
-          <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
-            <router-link :to="{
+    <el-main>
+      <el-card>
+        <iframe referrerpolicy="origin" :src="decodeUrl"
+                :key="vid" sandbox="allow-scripts allow-same-origin"
+                allowfullscreen frameborder="0">
+        </iframe>
+      </el-card>
+      <el-row>
+        <el-col>
+          <el-button class="button" type="primary" icon="el-icon-back" circle @click="goBack"></el-button>
+          <el-button class="button" :type="type" icon="el-icon-star-off" circle @click="collection"></el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
+        <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
+          <router-link :to="{
                   name : 'video',
                   query : {
                   q : encodeUrl(item.embedded_url),
                   v : item.vid
                  }}">
+            <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
               <el-card :body-style="{ padding: '0px' }">
                 <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                        @mouseover="playPreVideo($event)"
                        @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
-                <div style="padding: 14px;" :title="item.title" >
+                <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{countAddTime(item)}}</time>
@@ -36,13 +37,14 @@
                   </div>
                 </div>
               </el-card>
-            </router-link>
-          </el-col>
-        </el-row>
-        <div class="show">
-          <el-button type="primary" round @click="showMore">{{$t('message.more')}}</el-button>
-        </div>
-      </el-main>
+            </el-tooltip>
+          </router-link>
+        </el-col>
+      </el-row>
+      <div class="show">
+        <el-button type="primary" round @click="showMore">{{$t('message.more')}}</el-button>
+      </div>
+    </el-main>
   </div>
 </template>
 
@@ -258,7 +260,7 @@ export default {
     margin-left: 4px;
   }
 
-  .show{
+  .show {
     text-align: center;
   }
 </style>
