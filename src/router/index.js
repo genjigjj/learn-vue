@@ -46,7 +46,9 @@ const router = new Router({
       path: '/category/:c',
       component: MainView,
       beforeEnter: (to, from, next) => {
-        store.commit('setPageNo', 1)
+        if (from.name !== 'video') {
+          store.commit('setPageNo', 1)
+        }
         store.commit('setCategory', to.params.c)
         next()
       }
@@ -56,7 +58,9 @@ const router = new Router({
       path: '/collection/:q',
       component: MainView,
       beforeEnter: (to, from, next) => {
-        store.commit('setPageNo', 1)
+        if (from.name !== 'video') {
+          store.commit('setPageNo', 1)
+        }
         store.commit('setQueryValue', to.params.q)
         next()
       }

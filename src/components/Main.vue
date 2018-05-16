@@ -29,17 +29,18 @@
       </el-row>
       <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
         <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
-          <router-link :to="{
+          <el-tooltip effect="dark" placement="top">
+            <div slot="content"><span class="tips">{{item.title}}</span></div>
+            <el-card :body-style="{ padding: '0px' }">
+              <video preload="auto" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+                     @mouseover="playPreVideo($event)" @click="playVideo($event)"
+                     @mouseout="reloadVideo($event)"></video>
+              <router-link :to="{
                   name : 'video',
                   query : {
                   q : encodeUrl(item.embedded_url),
                   v : item.vid
                  }}">
-            <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
-              <el-card :body-style="{ padding: '0px' }">
-                <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                       @mouseover="playPreVideo($event)"
-                       @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
@@ -50,30 +51,33 @@
                     <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
                   </div>
                 </div>
-              </el-card>
-            </el-tooltip>
-          </router-link>
+              </router-link>
+            </el-card>
+          </el-tooltip>
         </el-col>
       </el-row>
     </el-main>
     <el-footer>
-      <el-pagination class="hidden-sm-and-down"
-                     background
-                     layout="prev, pager, next, jumper"
-                     :page-size="12"
-                     :page-count="getPageCount"
-                     :currentPage.sync="currentPageNo"
-                     @current-change="changePage">
-      </el-pagination>
-      <el-pagination class="hidden-md-and-up"
-                     small
-                     background
-                     layout="prev, pager, next, jumper"
-                     :page-size="12"
-                     :page-count="getPageCount"
-                     :currentPage.sync="currentPageNo"
-                     @current-change="changePage">
-      </el-pagination>
+      <el-row type="flex" justify="center">
+        <el-pagination class="hidden-sm-and-down"
+                       background
+                       layout="prev, pager, next, jumper"
+                       :page-size="12"
+                       :page-count="getPageCount"
+                       :currentPage.sync="currentPageNo"
+                       @current-change="changePage">
+        </el-pagination>
+        <el-pagination class="hidden-md-and-up"
+                       small
+                       background
+                       layout="prev, pager, next, jumper"
+                       :page-size="12"
+                       :page-count="getPageCount"
+                       :pager-count="5"
+                       :currentPage.sync="currentPageNo"
+                       @current-change="changePage">
+        </el-pagination>
+      </el-row>
     </el-footer>
   </div>
 </template>
@@ -151,12 +155,20 @@ export default {
     },
     // 播放视频
     playPreVideo(event) {
-      const video = event.currentTarget
+      const video = event.target
       video.play()
+    },
+    playVideo(event) {
+      const video = event.target
+      if (video.currentTime === 0) {
+        video.play()
+      } else {
+        this.reloadVideo(event)
+      }
     },
     // 重新加载
     reloadVideo(event) {
-      const video = event.currentTarget
+      const video = event.target
       // 安全暂停播放视频
       const playPromise = video.play()
       if (playPromise !== undefined) {
@@ -320,12 +332,17 @@ export default {
     text-overflow: ellipsis;
   }
 
-  a {
-    text-decoration: none;
+  .tips {
+    width: 100%;
+    margin: auto;
+    padding: 5px;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 
-  .el-pagination {
-    text-align: center;
+  a {
+    text-decoration: none;
   }
 
   .el-icon-star-on {
@@ -336,4 +353,5 @@ export default {
   .el-icon-view {
     margin-left: 4px;
   }
+
 </style>

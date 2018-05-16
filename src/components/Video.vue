@@ -1,7 +1,7 @@
 <template>
   <div id="video">
     <el-main>
-      <el-card>
+      <el-card :body-style="{ padding: '5px' }">
         <iframe referrerpolicy="origin" :src="decodeUrl"
                 :key="vid" sandbox="allow-scripts allow-same-origin"
                 allowfullscreen frameborder="0">
@@ -15,17 +15,18 @@
       </el-row>
       <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
         <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
-          <router-link :to="{
+          <el-tooltip effect="dark" placement="top">
+            <div slot="content"><span class="tips">{{item.title}}</span></div>
+            <el-card :body-style="{ padding: '0px' }">
+              <video preload="auto" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+                     @mouseover="playPreVideo($event)" @click="playVideo($event)"
+                     @mouseout="reloadVideo($event)" ></video>
+              <router-link :to="{
                   name : 'video',
                   query : {
                   q : encodeUrl(item.embedded_url),
                   v : item.vid
                  }}">
-            <el-tooltip class="item" effect="dark" :content="item.title" placement="top">
-              <el-card :body-style="{ padding: '0px' }">
-                <video preload="none" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                       @mouseover="playPreVideo($event)"
-                       @mouseout="reloadVideo($event)" @ended="reloadVideo($event)"></video>
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
@@ -36,9 +37,9 @@
                     <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
                   </div>
                 </div>
-              </el-card>
-            </el-tooltip>
-          </router-link>
+              </router-link>
+            </el-card>
+          </el-tooltip>
         </el-col>
       </el-row>
       <div class="show">
@@ -102,7 +103,8 @@ export default {
         this.type = 'danger'
         this.$message({
           message: this.$t('message.collectionSuccess'),
-          type: 'success'
+          type: 'success',
+          center: true
         })
       } else {
         const index = videoList.indexOf(this.vid)
@@ -111,7 +113,8 @@ export default {
         this.type = 'info'
         this.$message({
           message: this.$t('message.removeCollection'),
-          type: 'success'
+          type: 'success',
+          center: true
         })
       }
     },
@@ -128,6 +131,14 @@ export default {
     playPreVideo(event) {
       const video = event.currentTarget
       video.play()
+    },
+    playVideo(event) {
+      const video = event.target
+      if (video.currentTime === 0) {
+        video.play()
+      } else {
+        this.reloadVideo(event)
+      }
     },
     // 重新加载
     reloadVideo(event) {
@@ -181,6 +192,12 @@ export default {
     width: 100%;
     height: 480px;
     overflow: hidden;
+  }
+
+  @media screen and (max-width: 768px) {
+    iframe {
+      height: 195px;
+    }
   }
 
   .button {
@@ -245,6 +262,15 @@ export default {
     -webkit-line-clamp: 1;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .tips{
+    width: 100%;
+    margin: auto;
+    padding: 5px;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 
   a {

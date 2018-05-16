@@ -21,7 +21,7 @@ const messages = {
       time: ['All', 'Added Today', 'Added This Week', 'Added This Month'],
       orderBy: 'OrderBy',
       order: ['Being Watched', 'Most Recent', 'Most View', 'Most Commented', 'Top Rated', 'Top Favorites', 'Longest'],
-      more: 'show more',
+      more: 'Show More',
       collectionSuccess: 'Add to your favorites successfully',
       removeCollection: 'Remove from your favorites successfully',
       noMoreVideos: 'No more relative videos'

@@ -3,12 +3,14 @@
     <el-container>
       <el-header height="'65px'">
         <el-row :gutter="20">
-          <el-col :lg="3" :xs="24">
+          <el-col :lg="3" :xs="12">
             <div class="logo">
-              <img alt="logo" src="/static/logo.webp">
+              <router-link :to="{name: 'main'}">
+                <img alt="logo" src="/static/logo.webp">
+              </router-link>
             </div>
           </el-col>
-          <el-col :lg="5" :xs="24" class="language">
+          <el-col :lg="5" :xs="12" class="language">
             <el-row>
                 <el-select size="small" v-model="language" placeholder="请选择" @change="selectLang">
                   <el-option
@@ -128,6 +130,6 @@ export default {
 
   .language{
     margin-top: 10px;
-    padding: 10px 155px 10px 10px!important;
+    padding: 10px 13% 10px 10px!important;
   }
 </style>

@@ -160,7 +160,8 @@ const actions = {
         } else {
           Message({
             message: Vue.$t('message.noMoreVideos'),
-            type: 'warning'
+            type: 'warning',
+            center: true
           })
         }
         NProgress.done()
@@ -169,7 +170,8 @@ const actions = {
         console.log(err)
         Message({
           message: Vue.$t('message.noMoreVideos'),
-          type: 'warning'
+          type: 'warning',
+          center: true
         })
         NProgress.done()
       })

@@ -75,7 +75,7 @@ export function getRelatedVideoInfo(queryValue) {
       page: queryValue.page,
       vid: queryValue.vid
     },
-    url: 'http://127.0.0.1:3000/api/vids',
+    url: 'http://45.78.42.182:3000/api/vids',
     method: 'get'
   })
 }
