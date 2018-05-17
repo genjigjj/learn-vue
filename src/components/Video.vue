@@ -15,18 +15,18 @@
       </el-row>
       <el-row :gutter="20" v-for="temp in sliceList" :key="temp.id">
         <el-col :lg="6" :xs="24" v-for="item in temp" :key="item.id">
-          <el-tooltip effect="dark" placement="top">
-            <div slot="content"><span class="tips">{{item.title}}</span></div>
-            <el-card :body-style="{ padding: '0px' }">
-              <video preload="auto" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
-                     @mouseover="playPreVideo($event)" @click="playVideo($event)"
-                     @mouseout="reloadVideo($event)" ></video>
-              <router-link :to="{
+          <router-link :to="{
                   name : 'video',
                   query : {
                   q : encodeUrl(item.embedded_url),
                   v : item.vid
                  }}">
+            <el-tooltip effect="dark" placement="top">
+              <div slot="content"><span class="tips">{{item.title}}</span></div>
+              <el-card :body-style="{ padding: '0px' }">
+                <video preload="auto" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+                       @mouseover="mouseOverHandler($event)" @click="clickHandler($event)"
+                       @mouseout="reloadVideo($event)"></video>
                 <div style="padding: 14px;">
                   <span>{{item.title}}</span>
                   <div class="bottom clearfix">
@@ -37,9 +37,9 @@
                     <div class="like-rate"><i class="el-icon-star-on"></i>{{countLikeRate(item)}}%</div>
                   </div>
                 </div>
-              </router-link>
-            </el-card>
-          </el-tooltip>
+              </el-card>
+            </el-tooltip>
+          </router-link>
         </el-col>
       </el-row>
       <div class="show">
@@ -86,6 +86,10 @@ export default {
     }
   },
   methods: {
+    // 是否为移动端
+    isMobile() {
+      return /Mobile/i.test(navigator.userAgent)
+    },
     // 编码url
     encodeUrl(url) {
       const wordArray = CryptoJS.enc.Utf8.parse(url)
@@ -129,15 +133,25 @@ export default {
     },
     // 播放视频
     playPreVideo(event) {
-      const video = event.currentTarget
-      video.play()
-    },
-    playVideo(event) {
       const video = event.target
       if (video.currentTime === 0) {
         video.play()
       } else {
         this.reloadVideo(event)
+      }
+    },
+    // 鼠标移动事件
+    mouseOverHandler(event) {
+      if (event.type === 'mouseover' && !this.isMobile()) {
+        this.playPreVideo(event)
+      }
+    },
+    // 点击事件
+    clickHandler(event) {
+      // 如果是移动端，阻止默认行为
+      if (this.isMobile()) {
+        event.preventDefault()
+        this.playPreVideo(event)
       }
     },
     // 重新加载
