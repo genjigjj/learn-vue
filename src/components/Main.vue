@@ -4,7 +4,7 @@
       <el-row :gutter="20" v-if="$route.name !== 'favorites'">
         <el-form>
           <el-form-item :label="labelName">
-            <el-col :lg="4" :xs="9">
+            <el-col :lg="4" :md="4" :xs="9">
               <el-select v-model="time" :placeholder="$t('message.timeLine')" @change="select">
                 <el-option
                   v-for="(item, index) in optionsA"
@@ -14,7 +14,7 @@
                 </el-option>
               </el-select>
             </el-col>
-            <el-col :lg="4" :xs="9">
+            <el-col :lg="4" :md="4" :xs="9">
               <el-select v-model="order" :placeholder="$t('message.orderBy')" @change="select">
                 <el-option
                   v-for="(item, index) in optionsB"
@@ -38,7 +38,7 @@
             <el-tooltip effect="dark" placement="top">
               <div slot="content"><span class="tips">{{item.title}}</span></div>
               <el-card :body-style="{ padding: '0px' }">
-                <video preload="auto" loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
+                <video loop="loop" :src="item.preview_video_url" :poster="item.preview_url"
                        @mouseover="mouseOverHandler($event)" @click="clickHandler($event)"
                        @mouseout="reloadVideo($event)"></video>
                 <div style="padding: 14px;">
@@ -286,56 +286,46 @@ export default {
   .el-main .el-row {
     margin-bottom: 10px;
   }
-
   .el-col {
     border-radius: 4px;
     margin-bottom: 10px;
   }
-
   .el-form {
     margin-left: 10px;
   }
-
   .time {
     font-size: 13px;
     color: #555;
   }
-
   .bottom {
     margin-top: 13px;
     line-height: 12px;
   }
-
   .view-number {
     padding: 0;
     float: left;
     color: #aaa;
     font-size: 13px;
   }
-
   .like-rate {
     padding: 0;
     float: right;
     color: #777;
     font-weight: 700;
   }
-
   video {
     width: 100%;
     display: block;
     cursor: pointer;
   }
-
   .clearfix:before,
   .clearfix:after {
     display: table;
     content: "";
   }
-
   .clearfix:after {
     clear: both
   }
-
   .el-card span {
     color: #2a9fd6;
     font-size: 16px;
@@ -345,27 +335,14 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  .tips {
-    width: 100%;
-    margin: auto;
-    padding: 5px;
-    font-size: 14px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-  }
-
   a {
     text-decoration: none;
   }
-
   .el-icon-star-on {
     margin-right: 4px;
     color: #f35958
   }
-
   .el-icon-view {
     margin-left: 4px;
   }
-
 </style>

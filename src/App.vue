@@ -2,17 +2,17 @@
   <div id="app">
     <el-container>
       <el-header height="'65px'">
-        <el-row :gutter="20">
-          <el-col :lg="3" :xs="12">
-            <div class="logo">
+        <el-row type="flex" justify="space-around" :gutter="20">
+          <el-col :lg="3" :md="3" :xs="12">
+            <div class="logo header-item">
               <router-link :to="{name: 'main'}">
                 <img alt="logo" src="/static/logo.webp">
               </router-link>
             </div>
           </el-col>
-          <el-col :lg="5" :xs="12" class="language">
-            <el-row>
-                <el-select size="small" v-model="language" placeholder="请选择" @change="selectLang">
+          <el-col :lg="5" :md="5" :xs="12" class="language">
+            <el-row class="header-item">
+                <el-select class="select" size="small" v-model="language" placeholder="请选择" @change="selectLang">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -22,8 +22,8 @@
                 </el-select>
             </el-row>
           </el-col>
-          <el-col :lg="10" :xs="24">
-            <el-menu :default-active="$route.path" class="header-menu" background-color="#323232" text-color="#ababab"
+          <el-col :lg="10" :md="10" :xs="24">
+            <el-menu :default-active="$route.path" class="header-item" background-color="#323232" text-color="#ababab"
                      active-text-color="#ffd04b" mode="horizontal" :router="true">
               <el-menu-item index="/" @click.native="handleSelect(1)">{{ $t("message.videos") }}</el-menu-item>
               <el-menu-item :index="'/collections'" @click.native="handleSelect(2)">{{ $t("message.collections") }}</el-menu-item>
@@ -31,8 +31,8 @@
               <el-menu-item :index="'/favorites'" @click.native="handleSelect(4)">{{ $t("message.favorites") }}</el-menu-item>
             </el-menu>
           </el-col>
-          <el-col :lg="6" :xs="24">
-            <div class="search-input">
+          <el-col :lg="6" :md="6" :xs="24">
+            <div class="search-input header-item">
               <el-input v-model="inputValue" @keyup.native.enter="searchVideo" :placeholder="$t('message.search')"
                         class="input-with-search">
                 <el-button @click.native="searchVideo" slot="append" icon="el-icon-search"></el-button>
@@ -110,26 +110,25 @@ export default {
 </script>
 
 <style scoped>
-
   .input-with-search {
     background-color: #fff;
   }
-
   .search-input {
     padding: 10px;
   }
-
   .el-header {
     border: 1px solid #eee;
     background-color: #323232;
   }
-
   .el-menu--horizontal {
     border-bottom: none;
   }
-
-  .language{
-    margin-top: 10px;
-    padding: 10px 13% 10px 10px!important;
+  .header-item{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .select{
+    width: 60%;
   }
 </style>

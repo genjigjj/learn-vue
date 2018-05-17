@@ -51,16 +51,13 @@ export default {
   .el-main .el-row {
     margin-bottom: 10px;
   }
-
   .el-col {
     border-radius: 4px;
     margin-bottom: 10px;
   }
-
   img{
     width: 100%;
   }
-
   .el-card .el-row{
     border: 0;
     background-color: rgba(0,0,0,.7);
@@ -70,7 +67,6 @@ export default {
     margin-bottom: 0px;
     margin-top: -10%;
   }
-
   .pull-left{
     float: left;
     display: block;
@@ -78,12 +74,10 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .pull-right{
     float: right;
     text-align: right;
   }
-
   .badge{
     color: #fff;
     background-color: #2a9fd6;
