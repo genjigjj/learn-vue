@@ -80,3 +80,47 @@ export function getRelatedVideoInfo(queryValue) {
   })
 }
 
+// 添加喜欢的视频id
+export function addFavorite(vid) {
+  return axios({
+    params: {
+      vid: vid
+    },
+    url: 'http://45.78.42.182:3000/api/add',
+    method: 'get'
+  })
+}
+
+// 去除喜欢的视频id
+export function removeFavorite(vid) {
+  return axios({
+    params: {
+      vid: vid
+    },
+    url: 'http://45.78.42.182:3000/api/delete',
+    method: 'get'
+  })
+}
+
+// 获取指定区间视频id
+export function getVidList(start, end) {
+  return axios({
+    params: {
+      start: start,
+      end: end
+    },
+    url: 'http://45.78.42.182:3000/api/get',
+    method: 'get'
+  })
+}
+
+// 是否在收藏列表中
+export function isContain(vid) {
+  return axios({
+    params: {
+      vid: vid
+    },
+    url: 'http://45.78.42.182:3000/api/contain',
+    method: 'get'
+  })
+}

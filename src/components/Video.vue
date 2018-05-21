@@ -52,7 +52,6 @@
 <script>
 import CryptoJS from 'crypto-js'
 import moment from 'moment'
-import Store from 'store'
 import { mapGetters, mapState } from 'vuex'
 
 export default {
@@ -61,7 +60,6 @@ export default {
     return {
       videoUrl: '',
       vid: '',
-      type: '',
       pageNo: 0
     }
   },
@@ -70,7 +68,8 @@ export default {
       sliceList: 'relatedVideoGetter'
     }),
     ...mapState({
-      lang: state => state.videos.lang
+      lang: state => state.videos.lang,
+      type: state => state.videos.isMyFavorite
     }),
     decodeUrl() {
       const parsedWordArray = CryptoJS.enc.Base64.parse(this.videoUrl)
@@ -97,29 +96,10 @@ export default {
     },
     // 收藏
     collection() {
-      let videoList = Store.get('videoList')
-      if (videoList === undefined) {
-        videoList = []
-      }
       if (this.type === 'info') {
-        videoList.push(this.vid)
-        Store.set('videoList', videoList)
-        this.type = 'danger'
-        this.$message({
-          message: this.$t('message.collectionSuccess'),
-          type: 'success',
-          center: true
-        })
+        this.$store.dispatch('addToFavorite', this.vid)
       } else {
-        const index = videoList.indexOf(this.vid)
-        videoList.splice(index, 1)
-        Store.set('videoList', videoList)
-        this.type = 'info'
-        this.$message({
-          message: this.$t('message.removeCollection'),
-          type: 'success',
-          center: true
-        })
+        this.$store.dispatch('removeFromFavorite', this.vid)
       }
     },
     // 计算发布时间差
@@ -177,12 +157,7 @@ export default {
       this.$store.commit('clearRelatedVideoList')
       this.videoUrl = this.$route.query.q
       this.vid = this.$route.query.v
-      const videoList = Store.get('videoList')
-      if (videoList === undefined || videoList.indexOf(this.vid) === -1) {
-        this.type = 'info'
-      } else {
-        this.type = 'danger'
-      }
+      this.$store.dispatch('isFavorite', this.vid)
       this.$store.dispatch('getRelatedVideoList', {
         page: 0,
         vid: this.$route.query.v

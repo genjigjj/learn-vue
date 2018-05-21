@@ -1,8 +1,6 @@
-import { searchVideo, getFavorites, getVideos } from '@/api/video'
-import Store from 'store'
+import { searchVideo, getFavorites, getVideos, getRelatedVideoInfo, addFavorite, removeFavorite, getVidList, isContain } from '@/api/video'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'
-import { getRelatedVideoInfo } from '../../api/video'
 import { Message } from 'element-ui'
 import Vue from '@/main'
 // Progress 进度条样式
@@ -21,7 +19,8 @@ const state = {
   relatedVideoList: [],
   totalVideos: 0,
   vidList: [],
-  lang: ''
+  lang: '',
+  isMyFavorite: 'info'
 }
 const getters = {
   // 返回三个数组
@@ -81,6 +80,9 @@ const mutations = {
   },
   setLang(state, lang) {
     state.lang = lang
+  },
+  setIsMyFavorite(state, isMyFavorite) {
+    state.isMyFavorite = isMyFavorite
   }
 }
 const actions = {
@@ -119,20 +121,20 @@ const actions = {
       })
   },
   // 获取收藏的视频列表
-  getFavoriteVideoList({ commit }) {
+  async getFavoriteVideoList({ commit }) {
     NProgress.start()
-    const allVidList = Store.get('videoList')
-    if (allVidList !== undefined && allVidList.length > 0) {
-      const vidList = allVidList.slice((state.currentPageNo - 1) * 12, state.currentPageNo * 12)
-      getFavorites(vidList)
+    const res = await getVidList((state.currentPageNo - 1) * 12, state.currentPageNo * 12)
+    if (res.data.status === 1) {
+      getFavorites(res.data.vidList)
         .then(
           resultArray => {
             const tempVideosList = []
             for (const result of resultArray) {
-              tempVideosList.push(result.data.response.video)
+              if (result.data.success) {
+                tempVideosList.push(result.data.response.video)
+              }
             }
-            // commit('setVidList', vidList)
-            commit('setTotalVideos', allVidList.length)
+            commit('setTotalVideos', res.data.total)
             commit('setVideosList', tempVideosList)
             NProgress.done()
           }
@@ -174,6 +176,57 @@ const actions = {
           center: true
         })
         NProgress.done()
+      })
+  },
+  // 是否在收藏列表中
+  isFavorite({ commit }, vid) {
+    isContain(vid)
+      .then(res => {
+        if (res.data.status === 1) {
+          commit('setIsMyFavorite', 'danger')
+        } else {
+          commit('setIsMyFavorite', 'info')
+        }
+      })
+  },
+  // 添加到收藏中
+  addToFavorite({ commit }, vid) {
+    addFavorite(vid)
+      .then(res => {
+        if (res.data.status === 1) {
+          commit('setIsMyFavorite', 'danger')
+          Message({
+            message: Vue.$t('message.collectionSuccess'),
+            type: 'success',
+            center: true
+          })
+        } else {
+          Message({
+            message: Vue.$t('message.collectionFail'),
+            type: 'warning',
+            center: true
+          })
+        }
+      })
+  },
+  // 从收藏中移除
+  removeFromFavorite({ commit }, vid) {
+    removeFavorite(vid)
+      .then(res => {
+        if (res.data.status === 1) {
+          commit('setIsMyFavorite', 'info')
+          Message({
+            message: Vue.$t('message.removeSuccess'),
+            type: 'success',
+            center: true
+          })
+        } else {
+          Message({
+            message: Vue.$t('message.removeFail'),
+            type: 'warning',
+            center: true
+          })
+        }
       })
   }
 }

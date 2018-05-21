@@ -74,10 +74,10 @@ export default {
       }
     },
     handleSelect(no) {
+      this.$store.commit('setPageNo', 1)
       if (this.$store.state.videos.lock) {
         switch (no) {
           case 1:
-            this.$store.commit('setPageNo', 1)
             this.$store.commit('setCategory', '')
             this.$store.dispatch('getVideoInfo')
             break
@@ -89,7 +89,6 @@ export default {
             this.$store.dispatch('getCategoriesInfo')
             break
           case 4:
-            this.$store.commit('setPageNo', 1)
             this.$store.dispatch('getFavoriteVideoList')
             break
         }

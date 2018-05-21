@@ -23,7 +23,9 @@ const messages = {
       order: ['Being Watched', 'Most Recent', 'Most View', 'Most Commented', 'Top Rated', 'Top Favorites', 'Longest'],
       more: 'Show More',
       collectionSuccess: 'Add to your favorites successfully',
-      removeCollection: 'Remove from your favorites successfully',
+      collectionFail: 'Add to your favorites failed',
+      removeSuccess: 'Remove from your favorites successfully',
+      removeFail: 'Remove from your favorites failed',
       noMoreVideos: 'No more relative videos'
     },
     ...enLocale
@@ -41,7 +43,9 @@ const messages = {
       order: ['观看中', '最新', '最多观看', '最多评论', '最高评分', '最多收藏', '最长'],
       more: '更多',
       collectionSuccess: '收藏成功',
-      removeCollection: '取消收藏成功',
+      collectionFail: '收藏失败',
+      removeSuccess: '取消收藏成功',
+      removeFail: '取消收藏失败',
       noMoreVideos: '暂无相关视频'
     },
     ...zhLocale
