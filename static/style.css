@@ -15,7 +15,7 @@ body{
 }
 iframe {
   width: 100%;
-  height: 46vw;
+  height: 40vw;
 }
 @media screen and (max-width: 1024px){
   .el-pagination__jump{
@@ -23,5 +23,9 @@ iframe {
   }
   .tips{
     max-width: 80vw!important;
+  }
+  iframe {
+    width: 100%;
+    height: 63vw;
   }
 }
